@@ -1,5 +1,25 @@
 {% extends 'base.html' %}
 {% block body %}
-
+<div class="form">
+    <form method="post" enctype="multiplepart/form-data" class="form_main">
+        <div class="title">
+            <p>タイトル : {{ form.title }} (必須です。)</p>
+        </div>
+        <div class="rnk">
+            <p>下限ランク : {{ form.rnk_min }} ～ 上限ランク : {{ form.rnk_max }}</p>
+        </div>
+        <div class="num">
+            <p>募集人数 : {{ form.num }}</p>
+        </div>
+        <div class="per">
+            <p>モード : {{ form.per }}</p>
+        </div>
+        <div class="comments">
+            <p>募集にあたって : {{ form.comments }}(※500文字以内)</p>
+        </div>
+        <button type="submit">投稿</button>
+        {% csrf_token %}
+    </form>
+    
 {% endblock body %}
 
