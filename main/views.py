@@ -1,6 +1,6 @@
 from datetime import date
 from django.http import request
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView
 from django.shortcuts import render, redirect
 from .models import article_form
 from .forms import categorie_form
@@ -34,3 +34,4 @@ def formview(request):
         )
         return redirect('complete/')
     return render(request, 'form.html', context)
+

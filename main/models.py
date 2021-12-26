@@ -9,11 +9,5 @@ class article_form(models.Model):
     num = models.CharField(max_length=100)
     per = models.CharField(max_length=100)
 
-class tags(models.Model):
-    tag_name = models.TextField(default=' ', null=True)
-    
-    def __str__(self):
-        return self.tag_name
-
 #class users(models.Model):
 
