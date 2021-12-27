@@ -4,15 +4,17 @@ from datetime import datetime
 
 class categorie_form(forms.Form):
 
+    
+
     title = forms.CharField(max_length=30)
-    comments = forms.CharField(max_length=500)
+    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
     rank = (
-    ('b4', 'ブロンズ4'), ('b3', 'ブロンズ3'), ('b2', 'ブロンズ2'), ('b1', 'ブロンズ1'),
-    ('s4', 'シルバー4'), ('s3', 'シルバー3'), ('s2', 'シルバー2'), ('s1', 'シルバー1'),
-    ('g4', 'ゴールド4'), ('g3', 'ゴールド3'), ('g2', 'ゴールド2'), ('g1', 'ゴールド1'),
-    ('p4', 'プラチナ4'), ('p3', 'プラチナ3'), ('p2', 'プラチナ2'), ('p1', 'プラチナ1'),
-    ('d4', 'ダイヤ4'), ('d3', 'ダイヤ3'), ('d2', 'ダイヤ2'), ('d1', 'ダイヤ1'), ('mas', 'マスター'), ('pre', 'プレデター')
+    ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
+    ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
+    ('ゴールド4', 'ゴールド4'), ('ゴールド3', 'ゴールド3'), ('ゴールド2', 'ゴールド2'), ('ゴールド1', 'ゴールド1'),
+    ('プラチナ4', 'プラチナ4'), ('プラチナ3', 'プラチナ3'), ('プラチナ2', 'プラチナ2'), ('プラチナ1', 'プラチナ1'),
+    ('ダイヤ4', 'ダイヤ4'), ('ダイヤ3', 'ダイヤ3'), ('ダイヤ2', 'ダイヤ2'), ('ダイヤ1', 'ダイヤ1'), ('マスター', 'マスター'), ('プレデター', 'プレデター')
     )
 
     rnk_min = forms.fields.MultipleChoiceField(
@@ -29,7 +31,7 @@ class categorie_form(forms.Form):
         widget=forms.widgets.Select
     )
 
-    nums = (('0', '1人'), ('1', '2人'), ('2', '大会参加者募集'))
+    nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参加者募集'))
 
     num = forms.fields.MultipleChoiceField(
         choices = nums,
@@ -38,8 +40,8 @@ class categorie_form(forms.Form):
         widget=forms.widgets.Select
     )
 
-    pers = (('rnk', 'ランク'), ('casd', 'Duoカジュアル'), ('cast', 'Trioカジュアル'), ('aln', 'アリーナ'), ('aln_rnk', 'アリーナランク'),
-      ('comp', '大会')
+    pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル'), ('Trioカジュアル', 'Trioカジュアル'), ('アリーナ', 'アリーナ'), ('アリーナランク', 'アリーナランク'),
+      ('大会', '大会')
       )
 
     per = forms.fields.MultipleChoiceField(
@@ -47,4 +49,13 @@ class categorie_form(forms.Form):
         required=True,
         label = '目的',
         widget=forms.widgets.Select
+    )
+
+    hards = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
+
+    hard = forms.fields.MultipleChoiceField(
+        choices = hards,
+        required=True,
+        label = '使用機器',
+        widget=forms.RadioSelect
     )

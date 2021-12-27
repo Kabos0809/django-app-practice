@@ -2,3 +2,11 @@
 {% block head %}
 <h1>HELLO!!</h1>
 {% endblock head %}
+{% block body %}
+<div class="form">    
+    <a href="{% url 'main:Create_main' %}">form</a>
+</div>
+<div class="list">
+    <a href="{% url 'main:article_list' %}">list</a>
+</div>
+{% endblock body %}

@@ -1,6 +1,7 @@
 from datetime import date
+from django.db.models import query
 from django.http import request
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import render, redirect
 from .models import article_form
 from .forms import categorie_form
@@ -23,6 +24,7 @@ def formview(request):
         num = data['num']
         per = data['per']
         comments = data['comments']
+        hard = data['hard']
 
         article_form.objects.create(
             title = title,
@@ -31,7 +33,18 @@ def formview(request):
             num = num,
             per = per,
             comments = comments,
+            hard = hard,
         )
         return redirect('complete/')
     return render(request, 'form.html', context)
 
+class Article_list(ListView):
+    template_name = 'article_list.html'
+    model = article_form
+    ordering = ['-date']
+
+class Article_detail(DetailView):
+    template_name = 'detail.html'
+    model = article_form
+    context_object_name = 'object'
+    queryset = article_form.objects.all()

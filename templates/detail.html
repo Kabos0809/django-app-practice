@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="main">
+    <div class="title">
+        <h1>{{ object.title }}</h1>
+    </div>
+    <br>
+    <div class="categories">
+        <p>プレイ環境 : {{ object.hard }}</p>
+        <p>希望ランク : {{ object.rnk_min }} ～ {{ object.rnk_max }}</p>
+        <p>希望人数 : {{ object.num }} &nbsp; モード : {{ object.per }}</p>
+    </div>
+    <div class="comment">    
+        <p>募集に当たって : </p>
+        <p>{{ object.comments | linebreaksbr }}</p>
+    </div>
+{% endblock body %}

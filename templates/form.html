@@ -5,6 +5,13 @@
         <div class="title">
             <p>タイトル : {{ form.title }} (必須です。)</p>
         </div>
+        <div class="hard">
+            <p>プレイ環境 : 
+                {% for choice in form.hard %}
+                {{ choice }}
+                {% endfor %} 
+                </p>
+        </div>
         <div class="rnk">
             <p>下限ランク : {{ form.rnk_min }} ～ 上限ランク : {{ form.rnk_max }}</p>
         </div>
@@ -15,11 +22,14 @@
             <p>モード : {{ form.per }}</p>
         </div>
         <div class="comments">
-            <p>募集にあたって : {{ form.comments }}(※500文字以内)</p>
+            <p>募集にあたって : </p>
+        </p>{{ form.comments }}</p>
+        <p>(※500文字以内)</p>
         </div>
         <button type="submit">投稿</button>
         {% csrf_token %}
     </form>
     
+    <a href="{% url 'main:index' %}">index</a>
 {% endblock body %}
 

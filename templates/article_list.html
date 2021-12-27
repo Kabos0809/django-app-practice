@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="article_list">
+    {% for list in object_list %}
+    <ul class="artli">
+        <li>
+            <a href="{% url 'main:article_detail' list.pk %}">{{ list.title }}</a>
+            <p>人数 : {{ list.num }} &nbsp; 希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; プレイ環境 : {{ list.hard }} 投稿日時 : {{ list.date }}</p>
+        </li>
+    </ul>
+    {% endfor %}
+    <a href="{% url 'main:index' %}">index</a>
+{% endblock body %}
