@@ -16,6 +16,10 @@ class Complete_View(TemplateView):
 def formview(request):
     form = categorie_form()
     context = {'form' : form}
+
+    #copied = request.POST.copy()
+    #copied['author'] = request.author.username
+
     if request.method == 'POST':
         data = request.POST
         title = data['title']
@@ -25,8 +29,6 @@ def formview(request):
         per = data['per']
         comments = data['comments']
         hard = data['hard']
-        user = CustomUser.objects.all()
-        username = user.username
 
         article_form.objects.create(
             title = title,
@@ -36,7 +38,7 @@ def formview(request):
             per = per,
             comments = comments,
             hard = hard,
-            author = username
+
         )
         return redirect('complete/')
     return render(request, 'form.html', context)

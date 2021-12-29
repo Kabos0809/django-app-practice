@@ -1,4 +1,5 @@
 from django.core import validators
+from django.conf import settings
 from django.db import models
 from uuid import uuid4
 from django.utils import timezone
@@ -7,6 +8,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 
 class CustomUser(AbstractUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
@@ -16,13 +18,12 @@ class CustomUser(AbstractUser, PermissionsMixin):
     email = models.EmailField(_("email_address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_superuser = models.BooleanField(_("superuser status"), default=False)
-    is_active = models.BooleanField(_("active"), default=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     playfield = models.CharField(_("play field"), max_length=30, blank=True)
     rank = models.CharField(_("rank"), max_length=30, blank=False)
 
     objects = UserManager()
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "user_id"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = ['username']
 
@@ -54,6 +55,7 @@ class UserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self.db)
         return user
+
     def create_user(self, username, email, password=None, **extra_fields):
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
@@ -70,7 +72,7 @@ class UserManager(BaseUserManager):
 
 class article_form(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    author = models.ForeignKey(CustomUser, on_delete=models.PROTECT)
+    #author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30, default=' ', null= False)
     comments = models.CharField(max_length=500, default=' ', null= False)
