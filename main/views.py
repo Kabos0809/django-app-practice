@@ -3,7 +3,7 @@ from django.db.models import query
 from django.http import request
 from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import render, redirect
-from .models import article_form
+from .models import CustomUser, article_form
 from .forms import categorie_form
 
 
@@ -25,6 +25,8 @@ def formview(request):
         per = data['per']
         comments = data['comments']
         hard = data['hard']
+        user = CustomUser.objects.all()
+        username = user.username
 
         article_form.objects.create(
             title = title,
@@ -34,6 +36,7 @@ def formview(request):
             per = per,
             comments = comments,
             hard = hard,
+            author = username
         )
         return redirect('complete/')
     return render(request, 'form.html', context)
