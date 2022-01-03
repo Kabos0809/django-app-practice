@@ -2,7 +2,7 @@
 {% block body %}
 <div class="registration">
 <div class="regform">
-    <form>    
+    <form action="" method="POST">    
         <div class="username">
             <p>ユーザーネーム : {{ form.username }} ※30文字以内</p>
         </div>
@@ -38,6 +38,8 @@
             <p>YouTube : {{ form.Youtube_url }} ※任意</p>
         </div>
         <button type="submit">登録</button>
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% csrf_token %}
     </form>
 {% endblock body %}
 

@@ -1,4 +1,5 @@
 from datetime import date
+from re import template
 from django.contrib.auth import authenticate, login as auth_login, get_user_model
 from django.db.models import query
 from django.contrib import messages
@@ -6,7 +7,9 @@ from django.http import request
 from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import render, redirect
 from .models import CustomUser, article_form
-from .forms import UserCreationForm, categorie_form
+from .forms import UserCreationForm, categorie_form, LoginForm
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 User = get_user_model()
 
@@ -60,12 +63,21 @@ def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data.get('username')
             password1 = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=password1)
             auth_login(request, user)
-            return redirect('index')
+            return redirect('signup_complete/')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form':form})
+
+class MyLoginView(LoginView):
+    form_class = LoginForm
+    template_name = 'login.html'
+
+class MyLogoutView(LoginRequiredMixin, LogoutView):
+    template_name = 'logout.html'
+
+class signupcomplete(TemplateView):
+    template_name = 'signup_complete.html'

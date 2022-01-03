@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="in_form">
+    <form action="" method="POST">
+        <p>{{ form.as_p }}</p>
+        <button type="submit">ログイン</button>
+        <input type="hidden" name="next" value="{{ next }}" />
+        {% csrf_token %}
+    </form>
+    <a href="{% url 'main:sign_up' %}">アカウントをお持ちでない方はこちら</a>
+</div>
+{% endblock %}

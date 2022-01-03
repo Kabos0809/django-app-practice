@@ -2,8 +2,14 @@
 <head>
     <meta charset="UTF-8">
     <title>buddies</title>
+    <div class="menu">
+        {% if not user.is_authenticated %}
+            <a href="{% url 'main:login' %}">ログイン</a>
+        {% else %}
+            <a href="{% url 'main:logout' %}">ログアウト</a>
+        {% endif %}
+    </div>
     {% block head %}
-    <div class="title">
     {% endblock head %}
 </head>
 <body>

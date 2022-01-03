@@ -15,14 +15,14 @@ class UserAdmin(BaseUserAdmin):
     list_filter = ('email', 'is_staff', 'is_superuser')
     fieldsets = (
         (None, {
-            "fields": ('email', 'password', 'username', 'user_id')}),
+            "fields": ('email', 'password', 'username', 'user_id', 'id')}),
             ('Personal info', {'fields':('date', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')}),
             ('Permissions',{'fields':('is_staff', 'is_superuser')})
     )
     add_fieldsetd = (
         (None,{
             'classes':('wide',),
-            'fields':('username', 'email', 'user_id', 'password1', 'password2', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')}
+            'fields':('id', 'username', 'email', 'user_id', 'password1', 'password2', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')}
             ),
     )
     serach_fields = ('email',)

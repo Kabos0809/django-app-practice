@@ -3,6 +3,7 @@ from django.forms import fields, widgets
 from .models import CustomUser, article_form
 from datetime import datetime
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth import forms as auth_forms
 
 #投稿作成フォーム
 
@@ -77,7 +78,7 @@ class UserCreationForm(forms.ModelForm):
     )
 
     rnk = (
-    ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
+    ('設定なし', '設定なし'), ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
     ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
     ('ゴールド4', 'ゴールド4'), ('ゴールド3', 'ゴールド3'), ('ゴールド2', 'ゴールド2'), ('ゴールド1', 'ゴールド1'),
     ('プラチナ4', 'プラチナ4'), ('プラチナ3', 'プラチナ3'), ('プラチナ2', 'プラチナ2'), ('プラチナ1', 'プラチナ1'),
@@ -91,7 +92,7 @@ class UserCreationForm(forms.ModelForm):
         widget=forms.widgets.Select
     )
 
-    p_field = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
+    p_field = (('設定なし', '設定なし'), ('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
     ply_f = forms.ChoiceField(
         choices=p_field,
@@ -102,7 +103,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'user_id', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')
+        fields = ('username', 'user_id', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2')
 
         def clean_password2(self):
             password1 = self.cleaned_data.get("password1")
@@ -130,4 +131,9 @@ class UserChangeForm(forms.ModelForm):
         def clean_password(self):
             return self.initial["password"]
 
-
+class LoginForm(auth_forms.AuthenticationForm):
+    #ログインフォーム
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['placeholder'] = field.label

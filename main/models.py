@@ -14,8 +14,8 @@ from django.contrib.auth import get_user_model
 class CustomUser(AbstractUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
     
-    uuid = models.UUIDField(default=uuid4, primary_key=True, editable=False)
-    username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False)
+    id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
+    username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False, unique=True)
     user_id = models.CharField(_("user_id"), max_length=30, unique=True)
     email = models.EmailField(_("email_address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
@@ -28,9 +28,9 @@ class CustomUser(AbstractUser, PermissionsMixin):
     discord_id = models.CharField(_("discord"), max_length=100, blank=True)
 
     objects = UserManager()
-    USERNAME_FIELD = "user_id"
+    USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ['username']
+    REQUIRED_FIELDS = ["user_id"]
 
     class Meta:
         verbose_name = _("user")
