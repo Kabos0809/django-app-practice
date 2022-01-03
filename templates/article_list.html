@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block body %}
 <div class="article_list">
+    <h1>募集一覧</h1>
     {% for list in object_list %}
     <ul class="artli">
         <li>
@@ -9,5 +10,5 @@
         </li>
     </ul>
     {% endfor %}
-    <a href="{% url 'main:index' %}">index</a>
+    <a href="{% url 'main:index' %}">TOP</a>
 {% endblock body %}

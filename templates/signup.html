@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="registration">
+<div class="regform">
+    <form>    
+        <div class="username">
+            <p>ユーザーネーム : {{ form.username }} ※30文字以内</p>
+        </div>
+        <div class="user_id">
+            <p>アカウント名 : {{ form.user_id }} ※30文字以内</p>
+        </div>
+        <div class="email">
+            <p>Email : {{ form.email }} ※必須です</p>
+        </div>
+        <div class="password1">
+            <p>パスワード : {{ form.password1 }} ※半角英数字で8文字以上</p>
+        </div>
+        <div class="password2">
+            <p>パスワード(確認用) : {{ form.password2 }}</p>
+        </div>
+        <div class="playfield">
+            <p>プレイ環境 : 
+                {% for pf in form.ply_f %}
+                    {{ pf }}
+                {% endfor %} 
+                ※任意</p>
+        </div>
+        <div class="rank">
+            <p>ランク : {{ form.rank }} ※任意</p>
+        </div>
+        <div class="dis_id">
+            <p>discord : {{ form.discord_id }} ※任意</p>
+        </div>
+        <div class="twiid">
+            <p>Twitter : {{ form.twitter_id }} ※任意</p>
+        </div>
+        <div class="yturl">
+            <p>YouTube : {{ form.Youtube_url }} ※任意</p>
+        </div>
+        <button type="submit">登録</button>
+    </form>
+{% endblock body %}
+

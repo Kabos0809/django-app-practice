@@ -13,9 +13,10 @@ from django.contrib.auth import get_user_model
 
 class CustomUser(AbstractUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
-
+    
+    uuid = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False)
-    user_id = models.CharField(_("user id"), max_length=30, unique=True)
+    user_id = models.CharField(_("user_id"), max_length=30, unique=True)
     email = models.EmailField(_("email_address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_superuser = models.BooleanField(_("superuser status"), default=False)
@@ -24,6 +25,7 @@ class CustomUser(AbstractUser, PermissionsMixin):
     rank = models.CharField(_("rank"), max_length=30, blank=False)
     twitter_id = models.CharField(_("twitter id"), max_length=100, blank=True)
     Youtube_url = models.CharField(_("YouTube CHANNEL"), max_length=100, blank=True)
+    discord_id = models.CharField(_("discord"), max_length=100, blank=True)
 
     objects = UserManager()
     USERNAME_FIELD = "user_id"
