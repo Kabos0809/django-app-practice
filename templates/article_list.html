@@ -5,7 +5,7 @@
     <ul class="artli">
         <li>
             <a href="{% url 'main:article_detail' list.pk %}">{{ list.title }}</a>
-            <p>人数 : {{ list.num }} &nbsp; 希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; プレイ環境 : {{ list.hard }} &nbsp; 投稿日時 : {{ list.date }}</p>
+            <p>希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }} &nbsp; プレイ環境 : {{ list.hard }} &nbsp; 投稿日時 : {{ list.date }}</p>
         </li>
     </ul>
     {% endfor %}

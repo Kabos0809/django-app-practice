@@ -10,6 +10,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 
+
 class CustomUser(AbstractUser, PermissionsMixin):
     username_validator = UnicodeUsernameValidator()
 
@@ -21,6 +22,8 @@ class CustomUser(AbstractUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     playfield = models.CharField(_("play field"), max_length=30, blank=True)
     rank = models.CharField(_("rank"), max_length=30, blank=False)
+    twitter_id = models.CharField(_("twitter id"), max_length=100, blank=True)
+    Youtube_url = models.CharField(_("YouTube CHANNEL"), max_length=100, blank=True)
 
     objects = UserManager()
     USERNAME_FIELD = "user_id"
@@ -72,7 +75,7 @@ class UserManager(BaseUserManager):
 
 class article_form(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    #author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    #author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30, default=' ', null= False)
     comments = models.CharField(max_length=500, default=' ', null= False)

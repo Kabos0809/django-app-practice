@@ -1,11 +1,14 @@
 from datetime import date
+from django.contrib.auth import authenticate, login as auth_login, get_user_model
 from django.db.models import query
+from django.contrib import messages
 from django.http import request
 from django.views.generic import TemplateView, ListView, DetailView
 from django.shortcuts import render, redirect
 from .models import CustomUser, article_form
-from .forms import categorie_form
+from .forms import UserCreationForm, categorie_form
 
+User = get_user_model()
 
 class IndexView(TemplateView):
     template_name = 'index.html'
@@ -38,7 +41,6 @@ def formview(request):
             per = per,
             comments = comments,
             hard = hard,
-
         )
         return redirect('complete/')
     return render(request, 'form.html', context)
@@ -53,3 +55,5 @@ class Article_detail(DetailView):
     model = article_form
     context_object_name = 'object'
     queryset = article_form.objects.all()
+
+

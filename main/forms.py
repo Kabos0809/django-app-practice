@@ -3,6 +3,9 @@ from django.forms import fields, widgets
 from .models import CustomUser, article_form
 from datetime import datetime
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+
+#投稿作成フォーム
+
 class categorie_form(forms.Form):
 
     
@@ -10,6 +13,7 @@ class categorie_form(forms.Form):
     title = forms.CharField(max_length=30)
     comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
+    #ランク選択
     rank = (
     ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
     ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
@@ -32,6 +36,7 @@ class categorie_form(forms.Form):
         widget=forms.widgets.Select
     )
 
+    #人数
     nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参加者募集'))
 
     num = forms.fields.MultipleChoiceField(
@@ -41,6 +46,7 @@ class categorie_form(forms.Form):
         widget=forms.widgets.Select
     )
 
+    #ゲームモード
     pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル'), ('Trioカジュアル', 'Trioカジュアル'), ('アリーナ', 'アリーナ'), ('アリーナランク', 'アリーナランク'),
       ('大会', '大会')
       )
@@ -52,50 +58,24 @@ class categorie_form(forms.Form):
         widget=forms.widgets.Select
     )
 
+    #プレイ環境
     hards = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
     hard = forms.fields.MultipleChoiceField(
         choices = hards,
         required=True,
         label = '使用機器',
-        widget=forms.RadioSelect
+        widget=forms.CheckboxSelectMultiple
     )
+
+#ユーザー作成フォーム
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
     password2 = forms.CharField(
         label='Password confirmation', widget=forms.PasswordInput
     )
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'user_id', 'email')
 
-        def clean_password2(self):
-            password1 = self.cleaned_data.get("password1")
-            password2 = self.cleaned_data.get("password2")
-            if password1 and password2 and password1 != password2:
-                raise forms.ValidationError("Oops!! Passwords don't match.")
-            return password2
-        
-        def save(self, commit=True):
-            user = super().save(commit=False)
-            user.set_passoword(self.cleaned_data["password1"])
-            if commit:
-                user.save()
-            return user
-
-class UserChangeForm(forms.ModelForm):
-    password = ReadOnlyPasswordHashField()
-
-    class Meta:
-        model = CustomUser
-        fields = ('username', 'email', 'user_id')
-
-        def clean_password(self):
-            return self.initial["password"]
-
-
-class p_r_select(forms.Form):
     rnk = (
     ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
     ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
@@ -116,6 +96,38 @@ class p_r_select(forms.Form):
     ply_f = forms.ChoiceField(
         choices=p_field,
         required=True,
-        label='play field',
-        widget=forms.SelectMultiple()
+        label='playfield',
+        widget=forms.RadioSelect
     )
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'user_id', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url')
+
+        def clean_password2(self):
+            password1 = self.cleaned_data.get("password1")
+            password2 = self.cleaned_data.get("password2")
+            if password1 and password2 and password1 != password2:
+                raise forms.ValidationError("Oops!! Passwords don't match.")
+            return password2
+        
+        def save(self, commit=True):
+            user = super().save(commit=False)
+            user.set_passoword(self.cleaned_data["password1"])
+            if commit:
+                user.save()
+            return user
+
+#ユーザー情報修正フォーム
+
+class UserChangeForm(forms.ModelForm):
+    password = ReadOnlyPasswordHashField()
+
+    class Meta:
+        model = CustomUser
+        fields = ('username', 'email', 'user_id', 'playfield', 'rank', 'twitter_id', 'Youtube_url')
+
+        def clean_password(self):
+            return self.initial["password"]
+
+
