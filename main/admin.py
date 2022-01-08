@@ -11,11 +11,11 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('username', 'user_id', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')
+    list_display = ('user_id', 'username', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')
     list_filter = ('email', 'is_staff', 'is_superuser')
     fieldsets = (
         (None, {
-            "fields": ('email', 'password', 'username', 'user_id', 'id')}),
+            "fields": ('user_id', 'email', 'password', 'username', 'id')}),
             ('Personal info', {'fields':('date', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')}),
             ('Permissions',{'fields':('is_staff', 'is_superuser')})
     )
@@ -25,7 +25,7 @@ class UserAdmin(BaseUserAdmin):
             'fields':('id', 'username', 'email', 'user_id', 'password1', 'password2', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id')}
             ),
     )
-    serach_fields = ('email',)
+    serach_fields = ('email','username')
     ordering = ('email',)
     filter_horizonal = ()
 

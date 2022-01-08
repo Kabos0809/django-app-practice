@@ -66,8 +66,12 @@ class categorie_form(forms.Form):
         choices = hards,
         required=True,
         label = '使用機器',
-        widget=forms.CheckboxSelectMultiple
+        widget=forms.RadioSelect()
     )
+
+    class Meta:
+        model = article_form
+        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard')
 
 #ユーザー作成フォーム
 
@@ -94,11 +98,11 @@ class UserCreationForm(forms.ModelForm):
 
     p_field = (('設定なし', '設定なし'), ('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
-    ply_f = forms.ChoiceField(
+    playfield = forms.ChoiceField(
         choices=p_field,
         required=True,
         label='playfield',
-        widget=forms.RadioSelect
+        widget=forms.RadioSelect()
     )
 
     class Meta:

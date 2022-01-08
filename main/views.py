@@ -63,9 +63,12 @@ def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
+            password = form.cleaned_data.get('password1')
             user = form.save()
-            username = form.cleaned_data.get('username')
-            password1 = form.cleaned_data.get('password1')
+
+            user.set_password(password)
+            user.save()
+
             auth_login(request, user)
             return redirect('signup_complete/')
     else:
