@@ -23,9 +23,6 @@ def formview(request):
     form = categorie_form()
     context = {'form' : form}
 
-    #copied = request.POST.copy()
-    #copied['author'] = request.author.username
-
     if request.method == 'POST':
         data = request.POST
         title = data['title']
@@ -58,12 +55,15 @@ class Article_detail(DetailView):
     model = article_form
     context_object_name = 'object'
     queryset = article_form.objects.all()
+    
+
 
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             password = form.cleaned_data.get('password1')
+
             user = form.save()
 
             user.set_password(password)

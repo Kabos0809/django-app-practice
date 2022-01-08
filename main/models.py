@@ -54,6 +54,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     twitter_id = models.CharField(_("twitter id"), max_length=100, blank=True)
     Youtube_url = models.CharField(_("YouTube CHANNEL"), max_length=100, blank=True)
     discord_id = models.CharField(_("discord"), max_length=100, blank=True)
+    comments = models.CharField(max_length=300, blank=True, default="自己紹介はありません")
+    character = models.CharField(max_length=30, blank=True)
 
     objects = MyUserManager()
     USERNAME_FIELD = "username"
@@ -77,7 +79,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class article_form(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, to_field='username', editable=False, on_delete=models.CASCADE)
+    #author = models.ForeignKey(CustomUser, editable=False, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30, default=' ', null= False)
     comments = models.CharField(max_length=500, default=' ', null= False)

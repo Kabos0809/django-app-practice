@@ -81,6 +81,8 @@ class UserCreationForm(forms.ModelForm):
         label='Password confirmation', widget=forms.PasswordInput
     )
 
+    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
     rnk = (
     ('設定なし', '設定なし'), ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
     ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
@@ -105,9 +107,20 @@ class UserCreationForm(forms.ModelForm):
         widget=forms.RadioSelect()
     )
 
+    characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
+                ('バンガロール', 'バンガロール'), ('コースティック', 'コースティック'), ('ミラージュ', 'ミラージュ'), ('オクタン', 'オクタン'), ('ワットソン', 'ワットソン'), ('クリプト', 'クリプト'),
+                ('レヴナント', 'レヴナント'), ('ローバ', 'ローバ'), ('ランパート', 'ランパート'), ('ホライゾン', 'ホライゾン'), ('ヒューズ', 'ヒューズ'), ('シア', 'シア'), ('アッシュ', 'アッシュ'))
+
+    character = forms.fields.MultipleChoiceField(
+        choices = characters,
+        required=True,
+        label = 'よく使うキャラクター',
+        widget=forms.CheckboxSelectMultiple
+    )
+
     class Meta:
         model = CustomUser
-        fields = ('username', 'user_id', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2')
+        fields = ('username', 'user_id', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2', 'comments', 'character')
 
         def clean_password2(self):
             password1 = self.cleaned_data.get("password1")

@@ -33,8 +33,17 @@
                 ※任意</p>
         </div>
         <div class="rank">
-            <p>ランク : {{ form.rank }} ※任意</p>
+            <p>ランク : {{ form.rank }}</p>
         </div>
+        <div class="character">
+            <p>よく使うレジェンド : 
+                <div class="checks">
+                {% for ch in form.character %}
+                {{ ch }} &nbsp;
+                {% endfor %}
+                </div>
+            </p>
+        </div> 
         <div class="dis_id">
             <p>discord : {{ form.discord_id }} ※任意</p>
         </div>
@@ -44,6 +53,9 @@
         <div class="yturl">
             <p>YouTube : {{ form.Youtube_url }} ※任意</p>
         </div>
+        <div class="myself">
+            <p>自己紹介 : </p>
+            <p> {{ form.comments }} ※この項目は後から入力できます</p>
         <button type="submit">登録</button>
         <input type="hidden" name="next" value="{{ next }}" />
         {% csrf_token %}
