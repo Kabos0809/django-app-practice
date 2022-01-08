@@ -100,11 +100,11 @@ class UserCreationForm(forms.ModelForm):
 
     p_field = (('設定なし', '設定なし'), ('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
-    playfield = forms.ChoiceField(
+    playfield = forms.MultipleChoiceField(
         choices=p_field,
         required=True,
         label='playfield',
-        widget=forms.RadioSelect()
+        widget=forms.CheckboxSelectMultiple
     )
 
     characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
