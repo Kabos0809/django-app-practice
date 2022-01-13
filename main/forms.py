@@ -7,7 +7,7 @@ from django.contrib.auth import forms as auth_forms
 
 #投稿作成フォーム
 
-class categorie_form(forms.Form):
+class categorie_form(forms.ModelForm):
 
     
 
@@ -23,14 +23,14 @@ class categorie_form(forms.Form):
     ('ダイヤ4', 'ダイヤ4'), ('ダイヤ3', 'ダイヤ3'), ('ダイヤ2', 'ダイヤ2'), ('ダイヤ1', 'ダイヤ1'), ('マスター', 'マスター'), ('プレデター', 'プレデター')
     )
 
-    rnk_min = forms.fields.MultipleChoiceField(
+    rnk_min = forms.fields.ChoiceField(
         choices = rank,
         required=True,
         label='希望ランク',
         widget=forms.widgets.Select
     )
 
-    rnk_max= forms.fields.MultipleChoiceField(
+    rnk_max= forms.fields.ChoiceField(
         choices = rank,
         required=True,
         label='希望ランク',
@@ -40,7 +40,7 @@ class categorie_form(forms.Form):
     #人数
     nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参加者募集'))
 
-    num = forms.fields.MultipleChoiceField(
+    num = forms.fields.ChoiceField(
         choices = nums,
         required = True,
         label = '希望人数',
@@ -52,7 +52,7 @@ class categorie_form(forms.Form):
       ('大会', '大会')
       )
 
-    per = forms.fields.MultipleChoiceField(
+    per = forms.fields.ChoiceField(
         choices = pers,
         required=True,
         label = '目的',
@@ -62,7 +62,7 @@ class categorie_form(forms.Form):
     #プレイ環境
     hards = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
-    hard = forms.fields.MultipleChoiceField(
+    hard = forms.fields.ChoiceField(
         choices = hards,
         required=True,
         label = '使用機器',
@@ -73,6 +73,8 @@ class categorie_form(forms.Form):
         model = article_form
         fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard')
 
+
+
 #ユーザー作成フォーム
 
 class UserCreationForm(forms.ModelForm):
@@ -81,7 +83,7 @@ class UserCreationForm(forms.ModelForm):
         label='Password confirmation', widget=forms.PasswordInput
     )
 
-    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+    comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
     rnk = (
     ('設定なし', '設定なし'), ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
@@ -120,7 +122,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'user_id', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2', 'comments', 'character')
+        fields = ('username', 'player_name', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2', 'comments', 'character')
 
         def clean_password2(self):
             password1 = self.cleaned_data.get("password1")
@@ -143,13 +145,14 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'user_id', 'playfield', 'rank', 'twitter_id', 'Youtube_url')
+        fields = ('username', 'email', 'player_name', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'comments', 'character', 'discord_id')
 
         def clean_password(self):
             return self.initial["password"]
 
+#ログインフォーム
+
 class LoginForm(auth_forms.AuthenticationForm):
-    #ログインフォーム
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():

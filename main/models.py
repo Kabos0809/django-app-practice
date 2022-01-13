@@ -5,10 +5,10 @@ from uuid import uuid4
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser, AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
-from django.contrib.auth import get_user_model
+
 
 
 class MyUserManager(BaseUserManager):
@@ -43,7 +43,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False, unique=True)
-    user_id = models.CharField(_("user_id"), max_length=30, unique=True)
+    player_name = models.CharField(_("player name"), max_length=30, unique=True)
     email = models.EmailField(_("email_address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_superuser = models.BooleanField(_("superuser status"), default=False)
@@ -79,7 +79,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 class article_form(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    #author = models.ForeignKey(CustomUser, editable=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
     title = models.CharField(max_length=30, default=' ', null= False)
     comments = models.CharField(max_length=500, default=' ', null= False)
@@ -89,3 +89,5 @@ class article_form(models.Model):
     per = models.CharField(max_length=100)
     hard = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.id

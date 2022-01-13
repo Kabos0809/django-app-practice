@@ -1,15 +1,13 @@
-from datetime import date
-from re import template
 from django.contrib.auth import authenticate, login as auth_login, get_user_model
-from django.db.models import query
 from django.contrib import messages
-from django.http import request
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from .models import CustomUser, article_form
 from .forms import UserCreationForm, categorie_form, LoginForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
 
@@ -19,31 +17,21 @@ class IndexView(TemplateView):
 class Complete_View(TemplateView):
     template_name = 'complete.html'
 
-def formview(request):
-    form = categorie_form()
-    context = {'form' : form}
-
-    if request.method == 'POST':
-        data = request.POST
-        title = data['title']
-        rnk_min = data['rnk_min']
-        rnk_max = data['rnk_max']
-        num = data['num']
-        per = data['per']
-        comments = data['comments']
-        hard = data['hard']
-
-        article_form.objects.create(
-            title = title,
-            rnk_min = rnk_min,
-            rnk_max = rnk_max,
-            num = num,
-            per = per,
-            comments = comments,
-            hard = hard,
-        )
-        return redirect('complete/')
-    return render(request, 'form.html', context)
+class PostCreateView(LoginRequiredMixin, CreateView):
+   template_name = 'forms.html'
+   form_class = categorie_form
+   success_url = reverse_lazy('main:Complete')
+   
+   def form_valid(self, form):
+       # formに問題なければ、owner id に自分のUser idを割り当てる     
+       # request.userが一つのセットでAuthenticationMiddlewareでセットされている。
+       form.instance.user = self.request.user
+       messages.success(self.request, '投稿が完了しました')
+       return super(PostCreateView, self).form_valid(form)
+   
+   def form_invalid(self, form):
+       messages.warning(self.request, '投稿が失敗しました')
+       return redirect('main:Create_main')
 
 class Article_list(ListView):
     template_name = 'article_list.html'

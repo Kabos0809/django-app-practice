@@ -3,16 +3,12 @@
 <h1>HELLO!!</h1>
 {% endblock head %}
 {% block body %}
-{% if not user.is_authenticated %}
-<div class="form">    
-    <a href="{% url 'main:login' %}">form</a>
-</div>
-{% else %}
-<div class="form">    
-    <a href="{% url 'main:Create_main' %}">form</a>
-</div>
-{% endif %}
-<div class="list">
-    <a href="{% url 'main:article_list' %}">list</a>
+<div class="main">
+    <div class="form">    
+        <a href="{% url 'main:Create_main' %}">form</a>
+    </div>
+    <div class="list">
+        <a href="{% url 'main:article_list' %}">list</a>
+    </div>
 </div>
 {% endblock body %}

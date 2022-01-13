@@ -11,18 +11,18 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('user_id', 'username', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'comments', 'character')
+    list_display = ('player_name', 'username', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'comments', 'character')
     list_filter = ('email', 'is_staff', 'is_superuser')
     fieldsets = (
         (None, {
-            "fields": ('user_id', 'email', 'password', 'username', 'id')}),
+            "fields": ('player_name', 'email', 'password', 'username', 'id')}),
             ('Personal info', {'fields':('date', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'comments', 'character')}),
             ('Permissions',{'fields':('is_staff', 'is_superuser')})
     )
     add_fieldsetd = (
         (None,{
             'classes':('wide',),
-            'fields':('id', 'username', 'email', 'user_id', 'password1', 'password2', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'comments', 'character')}
+            'fields':('id', 'username', 'email', 'player_name', 'password1', 'password2', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'comments', 'character')}
             ),
     )
     serach_fields = ('email','username')

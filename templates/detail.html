@@ -5,11 +5,9 @@
         <h1>{{ object.title }}</h1>
     </div>
     <br>
-<!--
     <div class="author">
-    <a>{{ object.username }}</a>
+    <a>投稿者名 : {{ object.user }}</a>
     </div>
---> 
     <div class="categories">
         <p>プレイ環境 : {{ object.hard }}</p>
         <p>希望ランク : {{ object.rnk_min }} ～ {{ object.rnk_max }}</p>
@@ -19,4 +17,9 @@
         <p>募集に当たって : </p>
         <p>{{ object.comments | linebreaksbr }}</p>
     </div>
+    <div class="menu">
+        <a href="{% url 'main:article_list' %}">戻る</a>
+        <a href="{% url 'main:index' %}">TOP</a>
+    </div>
+</div>
 {% endblock body %}

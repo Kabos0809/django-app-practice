@@ -7,7 +7,7 @@
             <p>ユーザーネーム : {{ form.username }} ※30文字以内</p>
         </div>
         <div class="user_id">
-            <p>アカウント名 : {{ form.user_id }} ※30文字以内</p>
+            <p>Apex内のプレイヤー名 : {{ form.player_name }} ※30文字以内</p>
         </div>
         <div class="email">
             <p>Email : {{ form.email }} ※必須です</p>
@@ -17,13 +17,6 @@
         </div>
         <div class="password2">
             <p>パスワード(確認用) : {{ form.password2 }}</p>
-            {% if form.errors %}
-            <ul>
-            {% for error in form.non_field_errors %}
-            <li>error</li>
-            {% endfor %}
-            </ul>
-            {% endif %}
         </div>
         <div class="playfield">
             <p>プレイ環境 : 
