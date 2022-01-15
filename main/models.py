@@ -1,9 +1,8 @@
-from django.core import validators
 from django.conf import settings
 from django.db import models
 from uuid import uuid4
 from django.utils import timezone
-from django.contrib.auth.models import AbstractUser, AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
@@ -74,7 +73,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
     def __str__(self):
-        return self.username
+        return self.player_name
 
 
 class article_form(models.Model):
@@ -90,4 +89,4 @@ class article_form(models.Model):
     hard = models.CharField(max_length=100)
 
     def __str__(self):
-        return self.id
+        return str(self.id)

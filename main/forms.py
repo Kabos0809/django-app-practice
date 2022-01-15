@@ -1,21 +1,13 @@
 from django import forms
-from django.forms import fields, widgets
 from .models import CustomUser, article_form
-from datetime import datetime
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 
-#投稿作成フォーム
+characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
+                ('バンガロール', 'バンガロール'), ('コースティック', 'コースティック'), ('ミラージュ', 'ミラージュ'), ('オクタン', 'オクタン'), ('ワットソン', 'ワットソン'), ('クリプト', 'クリプト'),
+                ('レヴナント', 'レヴナント'), ('ローバ', 'ローバ'), ('ランパート', 'ランパート'), ('ホライゾン', 'ホライゾン'), ('ヒューズ', 'ヒューズ'), ('シア', 'シア'), ('アッシュ', 'アッシュ'))
 
-class categorie_form(forms.ModelForm):
-
-    
-
-    title = forms.CharField(max_length=30)
-    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
-
-    #ランク選択
-    rank = (
+ranks = (
     ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
     ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
     ('ゴールド4', 'ゴールド4'), ('ゴールド3', 'ゴールド3'), ('ゴールド2', 'ゴールド2'), ('ゴールド1', 'ゴールド1'),
@@ -23,22 +15,37 @@ class categorie_form(forms.ModelForm):
     ('ダイヤ4', 'ダイヤ4'), ('ダイヤ3', 'ダイヤ3'), ('ダイヤ2', 'ダイヤ2'), ('ダイヤ1', 'ダイヤ1'), ('マスター', 'マスター'), ('プレデター', 'プレデター')
     )
 
+nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参加者募集'))
+
+pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル'), ('Trioカジュアル', 'Trioカジュアル'), ('アリーナ', 'アリーナ'), ('アリーナランク', 'アリーナランク'),
+      ('大会', '大会'))
+
+p_field = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
+
+#投稿作成フォーム
+
+class categorie_form(forms.ModelForm):
+
+    title = forms.CharField(max_length=30)
+    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    #ランク選択
+
     rnk_min = forms.fields.ChoiceField(
-        choices = rank,
+        choices = ranks,
         required=True,
         label='希望ランク',
         widget=forms.widgets.Select
     )
 
     rnk_max= forms.fields.ChoiceField(
-        choices = rank,
+        choices = ranks,
         required=True,
         label='希望ランク',
         widget=forms.widgets.Select
     )
 
     #人数
-    nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参加者募集'))
 
     num = forms.fields.ChoiceField(
         choices = nums,
@@ -48,9 +55,6 @@ class categorie_form(forms.ModelForm):
     )
 
     #ゲームモード
-    pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル'), ('Trioカジュアル', 'Trioカジュアル'), ('アリーナ', 'アリーナ'), ('アリーナランク', 'アリーナランク'),
-      ('大会', '大会')
-      )
 
     per = forms.fields.ChoiceField(
         choices = pers,
@@ -60,10 +64,9 @@ class categorie_form(forms.ModelForm):
     )
 
     #プレイ環境
-    hards = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
     hard = forms.fields.ChoiceField(
-        choices = hards,
+        choices = p_field,
         required=True,
         label = '使用機器',
         widget=forms.RadioSelect()
@@ -73,6 +76,58 @@ class categorie_form(forms.ModelForm):
         model = article_form
         fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard')
 
+#投稿修正フォーム
+
+class PostUpdateForm(forms.ModelForm):
+
+    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    #ランク選択
+
+    rnk_min = forms.fields.ChoiceField(
+        choices = ranks,
+        required=True,
+        label='希望ランク',
+        widget=forms.widgets.Select
+    )
+
+    rnk_max= forms.fields.ChoiceField(
+        choices = ranks,
+        required=True,
+        label='希望ランク',
+        widget=forms.widgets.Select
+    )
+
+    #人数
+
+    num = forms.fields.ChoiceField(
+        choices = nums,
+        required = True,
+        label = '希望人数',
+        widget=forms.widgets.Select
+    )
+
+    #ゲームモード
+
+    per = forms.fields.ChoiceField(
+        choices = pers,
+        required=True,
+        label = '目的',
+        widget=forms.widgets.Select
+    )
+
+    #プレイ環境
+
+    hard = forms.fields.ChoiceField(
+        choices = p_field,
+        required=True,
+        label = '使用機器',
+        widget=forms.RadioSelect()
+    )
+
+    class Meta:
+        model = article_form
+        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard')
 
 
 #ユーザー作成フォーム
@@ -85,37 +140,23 @@ class UserCreationForm(forms.ModelForm):
 
     comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
-    rnk = (
-    ('設定なし', '設定なし'), ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
-    ('シルバー4', 'シルバー4'), ('シルバー3', 'シルバー3'), ('シルバー2', 'シルバー2'), ('シルバー1', 'シルバー1'),
-    ('ゴールド4', 'ゴールド4'), ('ゴールド3', 'ゴールド3'), ('ゴールド2', 'ゴールド2'), ('ゴールド1', 'ゴールド1'),
-    ('プラチナ4', 'プラチナ4'), ('プラチナ3', 'プラチナ3'), ('プラチナ2', 'プラチナ2'), ('プラチナ1', 'プラチナ1'),
-    ('ダイヤ4', 'ダイヤ4'), ('ダイヤ3', 'ダイヤ3'), ('ダイヤ2', 'ダイヤ2'), ('ダイヤ1', 'ダイヤ1'), ('マスター', 'マスター'), ('プレデター', 'プレデター')
-    )
-
     rank = forms.ChoiceField(
-        choices=rnk,
+        choices=ranks,
         required=True,
         label='rank',
         widget=forms.widgets.Select
     )
 
-    p_field = (('設定なし', '設定なし'), ('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
-
     playfield = forms.MultipleChoiceField(
         choices=p_field,
-        required=True,
+        required=False,
         label='playfield',
         widget=forms.CheckboxSelectMultiple
     )
 
-    characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
-                ('バンガロール', 'バンガロール'), ('コースティック', 'コースティック'), ('ミラージュ', 'ミラージュ'), ('オクタン', 'オクタン'), ('ワットソン', 'ワットソン'), ('クリプト', 'クリプト'),
-                ('レヴナント', 'レヴナント'), ('ローバ', 'ローバ'), ('ランパート', 'ランパート'), ('ホライゾン', 'ホライゾン'), ('ヒューズ', 'ヒューズ'), ('シア', 'シア'), ('アッシュ', 'アッシュ'))
-
     character = forms.fields.MultipleChoiceField(
         choices = characters,
-        required=True,
+        required=False,
         label = 'よく使うキャラクター',
         widget=forms.CheckboxSelectMultiple
     )
@@ -142,6 +183,29 @@ class UserCreationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
+
+    comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    rank = forms.ChoiceField(
+        choices=ranks,
+        required=True,
+        label='rank',
+        widget=forms.widgets.Select
+    )
+
+    playfield = forms.MultipleChoiceField(
+        choices=p_field,
+        required=True,
+        label='playfield',
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    character = forms.fields.MultipleChoiceField(
+        choices = characters,
+        required=True,
+        label = 'よく使うキャラクター',
+        widget=forms.CheckboxSelectMultiple
+    )
 
     class Meta:
         model = CustomUser

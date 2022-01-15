@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% block body %}
 <div class="article_list">
-    <h1>募集一覧</h1>
+    <h3>募集一覧</h3>
     {% for list in object_list %}
     <ul class="artli">
         <li>
-            <a href="{% url 'main:article_detail' list.pk %}">{{ list.title }}</a>
+            <a href="{% url 'main:article_detail' list.pk %}">{{ list.title }}</a> &nbsp; 
+            {% if list.user_id == user.id %}
+            <a href="{% url 'main:update' list.pk %}" class="update-link">編集</a>
+            {% endif %}
             <p>希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }} &nbsp; プレイ環境 : {{ list.hard }} &nbsp; 投稿日時 : {{ list.date }}</p>
         </li>
     </ul>

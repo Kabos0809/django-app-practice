@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class="content-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 offset-sm-3">
+                {% if messages %}
+                    {% for message in messages %}
+                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{ message }}
+                    </li>
+                    {% endfor %}
+                {% endif %}
+                <div class="header">
+                    <h3><b>投稿の編集</b></h3>
+                </div>
+                {% if object.user_id == user.id %}
+                    <div class="main">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="title">
+                                <p>タイトル : {{ form.title }} (必須です)</p>
+                            </div>
+                            <div class="hard">
+                                <p>プレイ環境 : 
+                                    {% for choice in form.hard %}
+                                    {{ choice }}
+                                    {% endfor %} 
+                                    </p>
+                            </div>
+                            <div class="rnk">
+                                <p>下限ランク : {{ form.rnk_min }} ～ 上限ランク : {{ form.rnk_max }}</p>
+                            </div>
+                            <div class="num">
+                                <p>募集人数 : {{ form.num }}</p>
+                            </div>
+                            <div class="per">
+                                <p>モード : {{ form.per }}</p>
+                            </div>
+                            <div class="comments">
+                                <p>募集にあたって : </p>
+                                <p>{{ form.comments }}</p>
+                            <p>(※500文字以内)</p>
+                            </div>
+                            <button type="submit">更新</button>
+                        </form>
+                {% else %}
+                        <p class='danger-text'>
+                            {{ user.get_username }}さんの投稿ではありません。
+                        </p>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock body %}
