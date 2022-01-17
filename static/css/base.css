@@ -1,0 +1,62 @@
+html{
+    background-color: #ffffff;
+}
+
+.m-bar > .logo-index > .buddies-logo{
+    position: relative;
+    top: -54px;
+    margin-left: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.m-bar > .menu{
+    position: relative;
+    width: 100%;
+    background-color: #ea5532;
+    height: 70px;
+}
+
+.m-bar > .menu > .logout{
+    position: relative;
+    background-color: black;
+    display: inline-block;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px;
+    margin-left: 1390px;
+    top: 12px;
+}
+
+.m-bar > .menu > .log-in-sign-up > a{
+    position: relative;
+    background-color: black;
+    display: inline-block;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 10px;
+    margin-left: 1200px;
+    top: 12px;
+}
+
+.main > .side-menu > .m-li {
+    position: absolute;
+    list-style: none;
+}
+
+.main > .side-menu > .m-li > li > a{
+    position: relative;
+    display: block;
+    text-decoration: none;
+    background-color: #ea5532;
+    color: #ffffff;
+    margin-top: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    width: 200px;
+}
+

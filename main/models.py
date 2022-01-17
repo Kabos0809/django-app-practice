@@ -1,3 +1,4 @@
+from turtle import title
 from django.conf import settings
 from django.db import models
 from uuid import uuid4
@@ -7,8 +8,6 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
-
-
 
 class MyUserManager(BaseUserManager):
     use_in_migrations = True
@@ -65,6 +64,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         verbose_name = _("user")
         verbose_name_plural = _("users")
 
+
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)
@@ -90,3 +90,15 @@ class article_form(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+class reportModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
+    article_id = models.CharField(max_length=100, blank=True)
+    category = models.CharField(max_length=30, blank=True)
+    date = models.DateTimeField(default=timezone.now)
+    matters = models.CharField(max_length=100, blank=True)
+    not_mischief = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.date)

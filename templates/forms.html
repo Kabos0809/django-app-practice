@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load static %}
+<link rel=stylesheet type=text/css href="{% static 'css/form.css' %}" />
 <div class="form">
     <form method="post" enctype="multipart/form-data" class="form_main">
         <div class="midashi">
-            <h2>仲間を見つけよう</h2>
+            <h2>仲間を集めよう</h2>
         </div>
         <div class="title">
             <p>タイトル : {{ form.title }} (必須です)</p>
@@ -33,6 +35,6 @@
         {% csrf_token %}
     </form>
     
-    <a href="{% url 'main:index' %}">index</a>
+    <a href="{% url 'main:Index' %}">index</a>
 {% endblock body %}
 

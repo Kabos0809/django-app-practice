@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block body %}
+{% load static %}
+<center>
+<div class="m-f-report">
+    <form method="post" enctype="multipart/form-data" class="form_main">
+        {% csrf_token %}
+        <h2>違反報告フォーム</h2>
+        <p class="warn-m">いたずらなどで報告したことが発覚した場合、アカウント停止などの処置をとる場合があります</p>
+        <div class="id">
+            <p>違反投稿のid : {{ form.article_id }}</p>
+        </div>
+        <div class="category">
+            <p>違反事項 : {{ form.category }}</p>
+        </div>
+        <div class="matters">
+            <p>詳細 : </p>
+            <p>{{ form.matters }}</p>
+        </div>
+        <div class="not-mischief">
+            <p>いたずらなどと発覚した場合の処置に同意する : {{ form.not_mischief }}</p>
+        </div>
+        <button type="submit">送信</button>
+    </form>
+</div>
+</center>
+{% endblock body %}

@@ -1,23 +1,53 @@
+{% load static %}
 <hmtl lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>buddies</title>
-    <div class="menu">
-        {% if not user.is_authenticated %}
-            <a href="{% url 'main:login' %}">ログイン</a>
-        {% else %}
-            <a href="{% url 'main:logout' %}">ログアウト</a>
-        {% endif %}
+    <link rel=stylesheet type=text/css href="{% static 'css/base.css' %}" />
+    <div class="m-bar">
+        <div class="menu">
+            {% if not user.is_authenticated %}
+            <div class="log-in-sign-up">
+                <a href="{% url 'main:Login' %}">ログイン</a> &nbsp; <a href="{% url 'main:Sign_Up' %}">サインアップ</a>
+            </div>
+            {% else %}
+                <a href="{% url 'main:Logout' %}" class="logout">ログアウト</a>
+            {% endif %}
+        </div>
+        <a href="{% url 'main:Index' %}" class="logo-index"><img src="{% static 'img/buddies.png' %}" class="buddies-logo"/></a>
     </div>
     {% block head %}
     {% endblock head %}
 </head>
 <body>
+    <div class="main">
+        <div class="side-menu">
+            <ul class="m-li">
+                <li>
+                    <a href="{% url 'main:Index' %}">HOME</a>
+                </li>
+                <li>
+                    <a href="{% url 'main:Create_Main' %}">募集する</a>
+                </li>
+                <li>
+                    <a href="{% url 'main:Article_List' %}">みんなの募集</a>
+                </li>
+                <li>
+                    <a href="">仲間を探す</a>
+                </li>
+                <li>
+                    <a href="">Messages</a>
+                </li>
+                <li>
+                    <a href="">Profile</a>
+                </li>
+                <li>
+                    <a href="">Setting</a>
+                </li>
+            </ul>
+        </div>
+    </div>
     {% block body %}
     {% endblock body %}
 </body>
-<footer>
-    {% block footer %}
-    {% endblock footer %}
-</footer>
 </html>

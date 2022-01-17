@@ -1,17 +1,27 @@
 {% extends 'base.html' %}
 {% block body %}
+{% load static %}
+<link rel=stylesheet type=text/css href="{% static 'css/list.css' %}" />
 <div class="article_list">
     <h3>募集一覧</h3>
     {% for list in object_list %}
     <ul class="artli">
         <li>
-            <a href="{% url 'main:article_detail' list.pk %}">{{ list.title }}</a> &nbsp; 
             {% if list.user_id == user.id %}
-            <a href="{% url 'main:update' list.pk %}" class="update-link">編集</a>
-            {% endif %}
-            <p>希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }} &nbsp; プレイ環境 : {{ list.hard }} &nbsp; 投稿日時 : {{ list.date }}</p>
+            <a href="{% url 'main:Update' list.pk %}" class="update-link">編集</a>
+            {% else %}
+            <a href="{% url 'main:Report' %}" class="report-form">違反報告</a>
+            {% endif %}</br>  
+            <a href="{% url 'main:Article_Detail' list.pk %}" class="post">
+            プレイヤー名 : {{ list.user.player_name }} &nbsp; </br>
+            タイトル : {{ list.title }}</br>
+            希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }} &nbsp; </br>
+            プレイ環境 : {{ list.hard }} &nbsp; 投稿日時 : {{ list.date }}
+        </a>
+        <p>id : {{ list.id }}</p>
         </li>
     </ul>
     {% endfor %}
-    <a href="{% url 'main:index' %}">TOP</a>
+    <a href="{% url 'main:Index' %}">TOP</a>
+</div>
 {% endblock body %}

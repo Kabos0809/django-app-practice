@@ -1,14 +1,8 @@
 {% extends 'base.html' %}
-{% block head %}
-<h1>HELLO!!</h1>
-{% endblock head %}
 {% block body %}
 <div class="main">
-    <div class="form">    
-        <a href="{% url 'main:Create_main' %}">form</a>
-    </div>
-    <div class="list">
-        <a href="{% url 'main:article_list' %}">list</a>
-    </div>
+    <h2>Hello!</h2>
+    <a href="{% url 'main:Create_Main' %}" class="f-form">form</a> &nbsp;
+    <a href="{% url 'main:Article_List' %}" class="f-list">list</a>
 </div>
 {% endblock body %}

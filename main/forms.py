@@ -1,5 +1,6 @@
+import encodings
 from django import forms
-from .models import CustomUser, article_form
+from .models import CustomUser, article_form, reportModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 
@@ -21,6 +22,8 @@ pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル')
       ('大会', '大会'))
 
 p_field = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
+
+
 
 #投稿作成フォーム
 
@@ -165,12 +168,12 @@ class UserCreationForm(forms.ModelForm):
         model = CustomUser
         fields = ('username', 'player_name', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2', 'comments', 'character')
 
-        def clean_password2(self):
+        def clean_password(self):
             password1 = self.cleaned_data.get("password1")
             password2 = self.cleaned_data.get("password2")
             if password1 and password2 and password1 != password2:
-                raise forms.ValidationError("Oops!! Passwords don't match.")
-            return password2
+                raise forms.ValidationError("パスワードが間違っています")
+            return password1
         
         def save(self, commit=True):
             user = super().save(commit=False)
@@ -221,3 +224,24 @@ class LoginForm(auth_forms.AuthenticationForm):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['placeholder'] = field.label
+
+#違反報告フォーム
+
+class ReportForm(forms.ModelForm):
+
+    article_id = forms.CharField(required=True)
+
+    categories = (('スパム', 'スパム'), ('出会いなどを誘うような内容', '出会いなどを誘うような内容'), ('公序良俗に反する内容', '公序良俗に反する内容'), ('暴言・脅迫・誹謗中傷', '暴言・脅迫・誹謗中傷'), ('その他', 'その他'))
+
+    category = forms.ChoiceField(
+        choices=categories,
+        label='違反事項',
+        required=True,
+        widget=forms.widgets.Select
+    )
+
+    matters = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    class Meta:
+        model = reportModel
+        fields = ('article_id', 'category', 'matters', 'not_mischief')

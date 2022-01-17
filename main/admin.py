@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserChangeForm, UserCreationForm
-from .models import CustomUser, article_form
+from .models import CustomUser, article_form, reportModel
 
 # Register your models here.
+admin.site.register(reportModel)
 admin.site.register(article_form)
 
 class UserAdmin(BaseUserAdmin):
