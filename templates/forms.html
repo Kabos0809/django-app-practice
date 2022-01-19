@@ -15,7 +15,14 @@
                 {% for choice in form.hard %}
                 {{ choice }}
                 {% endfor %} 
-                </p>
+            </p>
+        </div>
+        <div class="vc">
+            <p>VC : 
+                {% for vc in form.vc %}
+                {{ vc }}
+                {% endfor %}
+            </p>
         </div>
         <div class="rnk">
             <p>下限ランク : {{ form.rnk_min }} ～ 上限ランク : {{ form.rnk_max }}</p>

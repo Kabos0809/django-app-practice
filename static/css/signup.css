@@ -1,5 +1,21 @@
 .registration{
     position: relative;
     margin-left: 400px;
-    width: 720px;
+    margin-top: 40px;
+    width: 700px;
+    color: #49494d;
+    background-color: #ffff;
+    padding-top: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 50px;
+    border-right:1px solid #c0c0c0 ;
+    border-left: 1px solid #c0c0c0;
+    border-top: 1px solid #c0c0c0;
+}
+
+.registration > form > .character{
+    position: relative;
+    float: left;
+    display: block;
 }

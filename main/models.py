@@ -1,4 +1,3 @@
-from turtle import title
 from django.conf import settings
 from django.db import models
 from uuid import uuid4
@@ -42,6 +41,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False, unique=True)
     player_name = models.CharField(_("player name"), max_length=30, unique=True)
+    icon = models.ImageField(blank=True, null=True)
     email = models.EmailField(_("email_address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_superuser = models.BooleanField(_("superuser status"), default=False)
@@ -58,7 +58,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     objects = MyUserManager()
     USERNAME_FIELD = "username"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["email", "player_name"]
 
     class Meta:
         verbose_name = _("user")
@@ -87,6 +87,7 @@ class article_form(models.Model):
     num = models.CharField(max_length=100)
     per = models.CharField(max_length=100)
     hard = models.CharField(max_length=100)
+    vc = models.CharField(max_length=100, default='なし')
 
     def __str__(self):
         return str(self.id)

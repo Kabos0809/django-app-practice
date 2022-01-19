@@ -92,7 +92,7 @@ def signup(request):
             user.save()
 
             auth_login(request, user)
-            return redirect('Signup_Complete/')
+            return redirect('signup_complete/')
     else:
         form = UserCreationForm()
     return render(request, 'signup.html', {'form':form})

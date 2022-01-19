@@ -3,6 +3,7 @@ from django import forms
 from .models import CustomUser, article_form, reportModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
+from django.contrib.auth.password_validation import validate_password
 
 characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
                 ('バンガロール', 'バンガロール'), ('コースティック', 'コースティック'), ('ミラージュ', 'ミラージュ'), ('オクタン', 'オクタン'), ('ワットソン', 'ワットソン'), ('クリプト', 'クリプト'),
@@ -23,7 +24,7 @@ pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル')
 
 p_field = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
-
+vcs = (('なし', 'なし'), ('discord', 'discord'), ('ゲーム内VC', 'ゲーム内VC'), ('その他VC', 'その他VC'))
 
 #投稿作成フォーム
 
@@ -75,9 +76,16 @@ class categorie_form(forms.ModelForm):
         widget=forms.RadioSelect()
     )
 
+    vc = forms.ChoiceField(
+        choices=vcs,
+        label='ボイチャ',
+        required=False,
+        widget=forms.RadioSelect
+    )
+
     class Meta:
         model = article_form
-        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard')
+        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard', 'vc')
 
 #投稿修正フォーム
 
@@ -130,16 +138,13 @@ class PostUpdateForm(forms.ModelForm):
 
     class Meta:
         model = article_form
-        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard')
+        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard', 'vc')
 
 
 #ユーザー作成フォーム
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(
-        label='Password confirmation', widget=forms.PasswordInput
-    )
 
     comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
@@ -166,17 +171,11 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'player_name', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'password2', 'comments', 'character')
-
-        def clean_password(self):
-            password1 = self.cleaned_data.get("password1")
-            password2 = self.cleaned_data.get("password2")
-            if password1 and password2 and password1 != password2:
-                raise forms.ValidationError("パスワードが間違っています")
-            return password1
+        fields = ('icon', 'username', 'player_name', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'comments', 'character')
         
         def save(self, commit=True):
             user = super().save(commit=False)
+            validate_password(self.cleaned_data['password1'], user)
             user.set_passoword(self.cleaned_data["password1"])
             if commit:
                 user.save()
@@ -212,7 +211,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'player_name', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'comments', 'character', 'discord_id')
+        fields = ('icon', 'username', 'email', 'player_name', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'comments', 'character', 'discord_id')
 
         def clean_password(self):
             return self.initial["password"]

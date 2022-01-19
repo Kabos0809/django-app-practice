@@ -1,6 +1,24 @@
 .article_list{
     position: relative;
-    margin-left: 430px;
+    margin-left: 400px;
+    margin-top: 35px;
+    margin-bottom: 50px;
+    background-color: #ffffff;
+    width: 700px;
+    padding-right: 10px;
+    padding-left: 10px;
+    padding-bottom: 50px;
+    border-top:1px solid #c0c0c0;
+    border-right:1px solid #c0c0c0;
+    border-left:1px solid #c0c0c0;
+}
+
+.article_list > h3{
+    position: relative;
+    top: -50px;
+    padding-right: 5px;
+    padding-left: 5px;
+    width: 85px;
 }
 
 .article_list > .artli > li{
@@ -18,8 +36,12 @@
     padding-bottom: 20px;
     display: block;
     font-weight:bold;
+    transition: .2s;
     color: #49494d;
-    border-radius: 10px;
+}
+
+.article_list > .artli > li > .post:hover{
+    background-color: #e2e1e6;
 }
 
 .article_list > .artli > li > p{
@@ -33,7 +55,7 @@
 
 .article_list > .artli > li > .update-link{
     position: relative;
-    top: 28px;
+    top: 29.5px;
     left: 577px;
     text-decoration: none;
     background-color: #7da2fa;
@@ -42,11 +64,16 @@
     padding-left: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
+    transition: .2s;
+}
+
+.article_list > .artli > li > .update-link:hover{
+    background-color: #6685c6;
 }
 
 .article_list > .artli > li > .report-form{
     position: relative;
-    top: 28px;
+    top: 29.5px;
     left: 546px;
     text-decoration: none;
     background-color: #804d58;
@@ -55,4 +82,9 @@
     padding-right: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
+    transition: .2s;
+}
+
+.article_list > .artli > li > .report-form:hover{
+    background-color: #663d46;
 }

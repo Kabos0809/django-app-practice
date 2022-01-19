@@ -1,10 +1,15 @@
 html{
-    background-color: #ffffff;
+    background-color: #f5f5f5;
 }
 
-.m-bar > .logo-index > .buddies-logo{
+.body-main-b{
     position: relative;
-    top: -54px;
+    padding-bottom: 500px;
+}
+
+.m-bar > .logo-index > .Gamate-logo{
+    position: relative;
+    top: -56px;
     margin-left: 30px;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -14,31 +19,63 @@ html{
 
 .m-bar > .menu{
     position: relative;
-    width: 100%;
+    width: 1510px;
     background-color: #ea5532;
     height: 70px;
 }
 
 .m-bar > .menu > .logout{
     position: relative;
-    background-color: black;
+    background-color: #49494d;
     display: inline-block;
     color: #ffffff;
     text-decoration: none;
-    padding: 10px;
-    margin-left: 1390px;
-    top: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    margin-left: 1350px;
+    top: 17px;
+    transition: .2s;
 }
 
-.m-bar > .menu > .log-in-sign-up > a{
+.m-bar > .menu > .logout:hover{
+    background-color: #303033;
+}
+
+.m-bar > .menu > .log-in > a{
     position: relative;
-    background-color: black;
-    display: inline-block;
+    background-color: #49494d;
     color: #ffffff;
     text-decoration: none;
-    padding: 10px;
-    margin-left: 1200px;
-    top: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    margin-left: 1240px;
+    top: 24px;
+    transition: .2s;
+}
+
+.m-bar > .menu > .log-in > a:hover{
+    background-color: #303033;
+}
+
+.m-bar > .menu > .sign-up > a{
+    position: relative;
+    background-color: #49494d;
+    color: #ffffff;
+    text-decoration: none;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 7px;
+    padding-top: 7px;
+    margin-left: 1350px;
+    top: 0px;
+}
+
+.m-bar > .menu > .sign-up > a:hover{
+    background-color: #303033;
 }
 
 .main > .side-menu > .m-li {
@@ -52,11 +89,16 @@ html{
     text-decoration: none;
     background-color: #ea5532;
     color: #ffffff;
-    margin-top: 40px;
+    border-bottom:0.5px solid #c0c0c0;
+    margin-top: 0px;
     padding-top: 10px;
     padding-bottom: 10px;
     padding-right: 20px;
     padding-left: 20px;
     width: 200px;
+    transition: .2s;
 }
 
+.main > .side-menu > .m-li > li > a:hover{
+    background-color: #cc482b;
+}
