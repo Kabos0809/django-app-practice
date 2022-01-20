@@ -1,3 +1,5 @@
+from concurrent.futures import thread
+import uuid
 from django.conf import settings
 from django.db import models
 from uuid import uuid4
@@ -103,3 +105,24 @@ class reportModel(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+class Thread(models.Model):
+    id = models.UUIDField(primary_key=True, editable=False, default=uuid4)
+    title = models.CharField(max_length=50)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.PROTECT)
+    created = models.DateTimeField(default=timezone.now())
+    update = models.DateTimeField(auto_now=True)
+    about = models.CharField(max_length=140)
+
+    def __str__(self):
+        return self.title
+
+class ExchangeInfoModel(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.PROTECT)
+    thread = models.ForeignKey(Thread, editable=False, on_delete=models.CASCADE)
+    date = models.DateTimeField(default=timezone.now())
+    about = models.CharField(max_length=140)
+
+    def __str__(self):
+        return self.id
+    

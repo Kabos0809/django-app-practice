@@ -22,4 +22,8 @@ urlpatterns = [
     path('report/login/', views.MyLoginView.as_view(), name="Report_Login"),
     path('report/report_comp/', views.ReportCompView.as_view(), name="Report_Comp"),
     path('delete/<uuid:pk>/', views.PostDeleteView.as_view(), name="Post_Delete"),
+    path('thread_list/', views.threads_list, name="Threads_List"),
+    path('comments_list/<uuid:thread_id>/', views.comments_list, name="Comments_List"),
+    path('create_thread/', views.create_thread, name="Create_Thread"),
+    path('create_comment/', views.create_thread, name="Create_Comment"),
 ]

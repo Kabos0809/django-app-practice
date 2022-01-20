@@ -21,9 +21,17 @@
     width: 85px;
 }
 
+.article_list > .artli > li > hr{
+    position: relative;
+    width: 719px;
+    left: -50px;
+}
+
 .article_list > .artli > li{
+    position: relative;
+    top: -35px;
     list-style: none;
-    margin-top: -10px;
+    margin-top: 10px;
 }
 
 .article_list > .artli > li > .post{
@@ -32,8 +40,8 @@
     width: 600px;
     padding-left: 30px;
     padding-right: -50px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 40px;
+    padding-bottom: 40px;
     display: block;
     font-weight:bold;
     transition: .2s;

@@ -1,6 +1,6 @@
 import encodings
 from django import forms
-from .models import CustomUser, article_form, reportModel
+from .models import CustomUser, ExchangeInfoModel, Thread, article_form, reportModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth.password_validation import validate_password
@@ -75,6 +75,8 @@ class categorie_form(forms.ModelForm):
         label = '使用機器',
         widget=forms.RadioSelect()
     )
+
+    #ボイチャ
 
     vc = forms.ChoiceField(
         choices=vcs,
@@ -244,3 +246,21 @@ class ReportForm(forms.ModelForm):
     class Meta:
         model = reportModel
         fields = ('article_id', 'category', 'matters', 'not_mischief')
+
+#情報交換掲示板
+
+class ThreadForm(forms.ModelForm):
+
+    about = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    class Meta:
+        model = Thread
+        fields = ('title', 'about')
+
+class ExchangeInfoForm(forms.ModelForm):
+
+    about = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    class Meta:
+        model = ExchangeInfoModel
+        fields = ('about',)
