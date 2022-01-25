@@ -8,17 +8,19 @@
     padding-right: 10px;
     padding-left: 10px;
     padding-bottom: 50px;
-    border-top:1px solid #c0c0c0;
+    border-top:40px solid #ea5532;
     border-right:1px solid #c0c0c0;
     border-left:1px solid #c0c0c0;
 }
 
 .article_list > h3{
     position: relative;
-    top: -50px;
+    top: -52px;
+    left: 5px;
     padding-right: 5px;
     padding-left: 5px;
     width: 85px;
+    color: #ffffff;
 }
 
 .article_list > .artli > li > hr{
@@ -32,6 +34,7 @@
     top: -35px;
     list-style: none;
     margin-top: 10px;
+
 }
 
 .article_list > .artli > li > .post{

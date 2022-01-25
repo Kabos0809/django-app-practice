@@ -1,5 +1,5 @@
-from concurrent.futures import thread
-import uuid
+from taggit.managers import TaggableManager
+from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
 from django.conf import settings
 from django.db import models
 from uuid import uuid4
@@ -9,6 +9,11 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
+
+class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
+    class Meta:
+        verbose_name =  ("Tag")
+        verbose_name_plural =  ("Tags")
 
 class MyUserManager(BaseUserManager):
     use_in_migrations = True
@@ -106,23 +111,12 @@ class reportModel(models.Model):
     def __str__(self):
         return str(self.date)
 
-class Thread(models.Model):
+class NewsModel(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid4)
     title = models.CharField(max_length=50)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.PROTECT)
-    created = models.DateTimeField(default=timezone.now())
-    update = models.DateTimeField(auto_now=True)
-    about = models.CharField(max_length=140)
-
-    def __str__(self):
-        return self.title
-
-class ExchangeInfoModel(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.PROTECT)
-    thread = models.ForeignKey(Thread, editable=False, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
+    tags = TaggableManager(blank=True, through=UUIDTaggedItem)
     date = models.DateTimeField(default=timezone.now())
-    about = models.CharField(max_length=140)
-
-    def __str__(self):
-        return self.id
+    about = models.CharField(max_length=2000)
     
+#class NewsComments(models.Model):

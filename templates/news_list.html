@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<center>
+<div class="news-main">
+    <div class="news-search">
+        <form class="search-form" method="GET" action="{% url 'main:News_List' %}">
+            <input class="t-box" type="text" name="keyword" placeholder="キーワード検索">
+            <p class="s-tags">タグ検索 : <input class="c-box-tag" type="checkbox" name="tags"></p>
+            <button class="s-btn" type="submit">検索</button>
+            {% csrf_token %}
+        </form>
+    </div>
+    <div class="news-list">
+        {% for list in object_list %}
+        <ul class="li">
+            <li>
+                <a href="{% url 'main:News_Detail' list.pk %}">
+                    タイトル : {{ list.title }} </br>
+                    関連タグ : {{ list.tags }} </br>
+                    投稿日時 : {{ list.date }}</br>
+                    本文 : {{ list.about | linebreaksbr }}</a>
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+    <a href="{% url 'main:News_Create' %}">投稿</a>
+</div>
+{% endblock body %}

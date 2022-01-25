@@ -1,6 +1,6 @@
 import encodings
 from django import forms
-from .models import CustomUser, ExchangeInfoModel, Thread, article_form, reportModel
+from .models import CustomUser, article_form, reportModel, NewsModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth.password_validation import validate_password
@@ -247,20 +247,12 @@ class ReportForm(forms.ModelForm):
         model = reportModel
         fields = ('article_id', 'category', 'matters', 'not_mischief')
 
-#情報交換掲示板
+#情報交換
 
-class ThreadForm(forms.ModelForm):
-
-    about = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
-
-    class Meta:
-        model = Thread
-        fields = ('title', 'about')
-
-class ExchangeInfoForm(forms.ModelForm):
+class NewsForm(forms.ModelForm):
 
     about = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
     class Meta:
-        model = ExchangeInfoModel
-        fields = ('about',)
+        model = NewsModel
+        fields = ('title', 'tags', 'about')

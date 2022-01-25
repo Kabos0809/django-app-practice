@@ -1,17 +1,13 @@
-from email import message
-from re import template
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
-from django.template import context
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from .models import CustomUser, ExchangeInfoModel, Thread, article_form, reportModel
-from .forms import ExchangeInfoForm, PostUpdateForm, ReportForm, ThreadForm, UserCreationForm, categorie_form, LoginForm
+from .models import CustomUser, NewsModel, article_form, reportModel
+from .forms import NewsForm, PostUpdateForm, ReportForm, UserCreationForm, categorie_form, LoginForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.paginator import Paginator
+from django.db.models import Q
 
 #HOME
 
@@ -139,78 +135,253 @@ class ReportView(LoginRequiredMixin, CreateView):
 class ReportCompView(TemplateView):
     template_name = 'report_comp.html'
 
-#情報交換掲示板
+#News作成
 
-#スレッド一覧
+class NewsCreateView(LoginRequiredMixin, CreateView):
+    form_class = NewsForm
+    template_name = 'news_create.html'
+    success_url = reverse_lazy('main:News_Complete')
+    login_url = 'login/'
 
-def threads_list(request):
-    threads = Thread.objects.all().values()
-    count = len(threads)
-    for count in range(count):
-        username_dicts = CustomUser.objects.filter(pk=threads[count]['user_id']).values('username')
-        threads[count].update(username_dicts[0])
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        messages.success(self.request, '投稿が完了しました')
+        return super(NewsCreateView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.warning(self.request, '投稿に失敗しました')
+        return redirect('main:News_Create')
+
+#News一覧
+
+class NewsListView(ListView):
+    model = NewsModel
+    template_name = 'news_list.html'
+    ordering = ['-date']
+    def get_queryset(self):
+        queryset = NewsModel.objects.order_by('-date')
+        keyword = self.request.GET.get('keyword')
+        tags = self.request.GET.get('tags')
+
+        if keyword:
+            queryset = queryset.filter(
+                            Q(title__icontains=keyword) | Q(about__icontains=keyword)
+                       )
+            messages.success(self.request, '「{}」の検索結果'.format(keyword))
+        
+        if tags and keyword:
+            queryset = queryset.filter(
+                            Q(tags__name__icontains=keyword)
+            )
+            messages.success(self.request, '「{}」の検索結果'.format(keyword))
+
+        return queryset
     
-    form = ThreadForm
+class NewsDetailView(DetailView):
+    model = NewsModel
+    template_name = 'news_detail.html'
+    queryset = article_form.objects.all()
 
-    paginator = Paginator(threads, 9)
-    current_page = request.GET.get('current_page')
-    threads = paginator.get_page(current_page)
-    context = {
-        'threads': threads,
-        'form': form,
-    }
-    return render(request, 'threads_list.html', context)
+#Search.htmlにおける検索機能
 
-#スレッド作成
+class SearchView(TemplateView):
+    template_name = 'base.html'
 
-def create_thread(request):
-    form = ThreadForm(request.POST)
+    def get_queryset(self):
+        keyword = self.request.GET.get('keyword')
+        user = self.request.GET.get('user')
+        recruit = self.request.GET.get('recruit')
+        news = self.request.GET.get('news')
 
-    if form.is_valid():
-        thread = form.save(commit=False)
-        thread.user = request.user
+        if user:
+            queryset = CustomUser.objects.order_by('-date_joined')
+            if keyword:
+                queryset = queryset.filter(
+                    Q(username__icontains=keyword | Q(player_name__icontains=keyword))
+                )
+                messages.success(self.request, '「{}」の検索結果'.format(keyword))
 
-        thread.save()
-        messages.success(request, "スレッドを作成しました")
-    else:
-        print("バリデーションエラー")
-    return redirect('main:Threads_List')
+        if recruit:
+            queryset = article_form.objects.order_by('-date')
+            category = self.request.GET.get('category')
+            num = self.request.GET.get('num')
+            vc = self.request.GET.get('hard')
+            hard = self.request.GET.get('hard')
 
-#レス一覧
+            if keyword:
+                if category:
+                    if num:
+                        if vc:
+                            if hard:
+                                queryset = queryset.filter(
+                                    title=keyword, per=category, num=num, vc=vc, hard=hard
+                                )
+                                messages.success(self.request, 'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + 'VC :「{}」 '.format(vc) + 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))
+                            else:
+                                queryset = queryset.filter(
+                                    title=keyword, per=category, num=num, vc=vc
+                                )
+                                messages.success(self.request, 'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + 'VC : 「{}」 '.format(vc) + '「{}」の検索結果'.format(keyword))
+                        elif hard:
+                            queryset = queryset.filter(
+                                title=keyword, per=category, num=num, hard=hard
+                            )
+                            messages.success(self.request, 'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))                       
+                        else:
+                            queryset = queryset.filter(
+                                title=keyword, per=category, num=num
+                            )
+                            messages.success(self.request, 'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + '「{}」の検索結果'.format(keyword))
+                    elif vc:
+                        if hard:
+                            queryset = queryset.filter(
+                                title=keyword, per=category, vc=vc, hard=hard
+                            )
+                            messages.success(self.request, 'モード :「{}」 '.format(category) + 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))
+                        else:
+                            queryset = queryset.filter(
+                                title=keyword, per=category, vc=vc
+                            )
+                            messages.success(self.request, 'モード :「{}」 '.format(category) + 'VC :「{}」 '.format(vc) + '「{}」の検索結果'.format(keyword))
+                    elif hard:
+                            queryset = queryset.filter(
+                                title=keyword, per=category, hard=hard
+                            )
+                            messages.success(self.request, 'モード :「{}」 '.format(category) + 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))
+                    else:
+                        queryset = queryset.filter(
+                            per=category, title=keyword
+                        )
+                        messages.success(self.request, 'モード :「{}」 '.format(category) + '「{}」の検索結果'.format(keyword))
 
-def comments_list(request, thread_id):
-    threads = Thread.objects.filter(pk=thread_id).values()
-    thread = threads[0]
-    username_dicts = CustomUser.objects.filter(pk=threads[0]['user_id']).values('username')
-    thread.update(username_dicts[0])
+                elif num:
+                    if vc:
+                        if hard:
+                            queryset = queryset.filter(
+                                title=keyword, num=num, vc=vc, hard=hard
+                            )
+                            messages.success(self.request, '人数 :「{}」 '.format(num) + 'VC :「{}」 '.format(vc) + 'プレイ環境 :「{}」'.format(hard) + '「{}」の検索結果'.format(keyword))
+                        else:
+                            queryset = queryset.filter(
+                                title=keyword, num=num, vc=vc
+                            )
+                            messages.success(self.request, '人数 :「{}」 '.format(num) + 'VC : 「{}」 '.format(vc) + '「{}」の検索結果'.format(keyword))
+                    elif hard:
+                            queryset = queryset.filter(
+                                title=keyword, num=num, hard=hard
+                            )
+                            messages.success(self.request, '人数 :「{}」 '.format(num) + 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))
+                    else:
+                        queryset = queryset.filter(
+                            num=num, title=keyword
+                        )
+                        messages.success(self.request, '人数 :「{}」 '.format(num) + '「{}」の検索結果'.format(keyword))
 
-    comments = ExchangeInfoModel.objects.filter(thread_id=thread_id).values()
-    count = len(comments)
-
-    for count in range(count):
-        username_dicts = CustomUser.objects.filter(pk=comments[count]['user_id']).values('username')
-        comments[count].update(username_dicts[0])
+                elif vc:
+                    if hard:
+                            queryset = queryset.filter(
+                                title=keyword, vc = vc, hard=hard
+                            )
+                            messages.success(self.request, 'VC :「{}」 '.format(vc) + 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))
+                    else:
+                        queryset = queryset.filter(
+                            vc=vc, title=keyword
+                        )
+                        messages.success(self.request, 'VC :「{}」 '.format(vc) + '「{}」の検索結果'.format(keyword))
     
-    form = ExchangeInfoForm
-    context = {
-        'thread': thread,
-        'comments': comments,
-        'form': form,
-    }
-    return render(request, 'comments_list.html', context)
-    
-#レス作成
+                elif hard:
+                    queryset = queryset.filter(
+                        hard=hard, title=keyword
+                    )
+                    messages.success(self.request, 'プレイ環境 :「{}」 '.format(hard) + '「{}」の検索結果'.format(keyword))
+                else:
+                    queryset = queryset.filter(
+                        title=keyword
+                    )
+                    messages.success(self.request, '「{}」の検索結果'.format(keyword))
 
-def create_comment(request):
-    thread_id = request.POST['thread_id']
-    form = ExchangeInfoForm(request.POST)
+            if category:
+                if num:
+                    if vc:
+                        if hard:
+                            queryset = queryset.filter(
+                                per=category, num=num, vc=vc, hard=hard
+                            )
+                            messages.success(self.request,'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + 'VC :「{}」 '.format(vc) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                        else:
+                            queryset = queryset.filter(
+                                per=category, num=num, vc=vc
+                            )
+                            messages.success(self.request,'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + 'VC : 「{}」の検索結果'.format(vc))
+                    elif hard:
+                            queryset = queryset.filter(
+                                per=category, num=num, hard=hard
+                            )
+                            messages.success(self.request,'モード :「{}」 '.format(category) + '人数 :「{}」 '.format(num) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                    else:
+                        queryset = queryset.filter(
+                            per=category, num=num
+                        )
+                        messages.success(self.request, 'モード :「{}」 '.format(category) + '人数 :「{}」の検索結果'.format(num))
+                elif vc:
+                    if hard:
+                        queryset = queryset.filter(
+                            per=category, vc=vc, hard=hard
+                        )
+                        messages.success(self.request, 'モード :「{}」 '.format(category) + 'VC :「{}」 '.format(vc) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                    else:
+                        queryset = queryset.filter(
+                            per=category, vc=vc
+                        )
+                        messages.success(self.request, 'モード :「{}」 '.format(category) + 'VC :「{}」の検索結果'.format(vc))
+                elif hard:
+                    queryset = queryset.filter(
+                        per=category, hard=hard
+                    )
+                    messages.success(self.request, 'モード :「{}」 '.format(category) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                else:
+                    queryset = queryset.filter(
+                        per=category
+                    )
+                    messages.success(self.request, 'モード :「{}」の検索結果'.format(category))
 
-    if form.is_valid():
-        comment = form.save(commit=False)
+            if num:
+                if vc:
+                    if hard:
+                        queryset = queryset.filter(
+                            num=num, vc=vc, hard=hard
+                        )
+                        messages.success(self.request, '人数 :「{}」'.format(num) + 'VC :「{}」'.format(vc) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                    else:
+                        queryset = queryset.filter(
+                            num=num, vc=vc
+                        )
+                        messages.success(self.request, '人数 :「{}」'.format(vc) + 'VC : 「{}」の検索結果'.format(vc))
+                elif hard:
+                    queryset = queryset.filter(
+                        num=num, hard=hard
+                    )
+                    messages.success(self.request, '人数 :「{}」'.format(num) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                else:
+                    queryset = queryset.filter(
+                        num=num
+                    )
+                    messages.success(self.request, '人数 :「{}」の検索結果'.format(num))
 
-        comment.user = request.user
-        comment.thread_id = thread_id
-        comment.save()
-        messages.success(request, "送信が完了しました")
-
-    return redirect('main:Comments_List', thread_id=thread_id)
+            if vc:
+                if hard:
+                    queryset = queryset.filter(
+                        vc = vc, hard=hard
+                    )
+                    messages.success(self.request, 'VC :「{}」'.format(vc) + 'プレイ環境 :「{}」の検索結果'.format(hard))
+                else:
+                    queryset = queryset.filter(
+                        vc=vc
+                    )
+                    messages.success(self.request, 'VC :「{}」の検索結果'.format(vc))
+            
+            if hard:
+                queryset = queryset.filter(
+                    hard=hard
+                )
+                messages.success(self.request, 'プレイ環境 :「{}」の検索結果'.format(hard))
