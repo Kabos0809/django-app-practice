@@ -3,11 +3,8 @@
 {% load static %}
 <link rel=stylesheet type=text/css href="{% static 'css/form.css' %}" />
 <div class="form">
+    <h3>パーティー募集</h3>
     <form method="post" enctype="multipart/form-data" class="form_main">
-        <div class="midashi">
-            <h2>仲間を集めよう</h2>
-            <hr>
-        </div>
         <div class="title">
             <p>タイトル : {{ form.title }} (必須です)</p>
         </div>
@@ -42,7 +39,6 @@
         <button type="submit">投稿</button>
         {% csrf_token %}
     </form>
-    
-    <a href="{% url 'main:Index' %}">index</a>
+</div>
 {% endblock body %}
 

@@ -1,13 +1,16 @@
+from dataclasses import fields
+from email.policy import default
 import encodings
+from enum import unique
 from django import forms
-from .models import CustomUser, article_form, reportModel, NewsModel
+from .models import CustomUser, NewsComments, article_form, reportModel, NewsModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth.password_validation import validate_password
 
 characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
                 ('バンガロール', 'バンガロール'), ('コースティック', 'コースティック'), ('ミラージュ', 'ミラージュ'), ('オクタン', 'オクタン'), ('ワットソン', 'ワットソン'), ('クリプト', 'クリプト'),
-                ('レヴナント', 'レヴナント'), ('ローバ', 'ローバ'), ('ランパート', 'ランパート'), ('ホライゾン', 'ホライゾン'), ('ヒューズ', 'ヒューズ'), ('シア', 'シア'), ('アッシュ', 'アッシュ'))
+                ('レヴナント', 'レヴナント'), ('ローバ', 'ローバ'), ('ランパート', 'ランパート'), ('ホライゾン', 'ホライゾン'), ('ヒューズ', 'ヒューズ'), ('シア', 'シア'), ('アッシュ', 'アッシュ'), ('マッドマギー', 'マッドマギー'))
 
 ranks = (
     ('ブロンズ4', 'ブロンズ4'), ('ブロンズ3', 'ブロンズ3'), ('ブロンズ2', 'ブロンズ2'), ('ブロンズ1', 'ブロンズ1'),
@@ -20,7 +23,7 @@ ranks = (
 nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参加者募集'))
 
 pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル'), ('Trioカジュアル', 'Trioカジュアル'), ('アリーナ', 'アリーナ'), ('アリーナランク', 'アリーナランク'),
-      ('大会', '大会'))
+        ('タイマン', 'タイマン'), ('大会', '大会'))
 
 p_field = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
@@ -89,59 +92,6 @@ class categorie_form(forms.ModelForm):
         model = article_form
         fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard', 'vc')
 
-#投稿修正フォーム
-
-class PostUpdateForm(forms.ModelForm):
-
-    comments = forms.CharField(widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
-
-    #ランク選択
-
-    rnk_min = forms.fields.ChoiceField(
-        choices = ranks,
-        required=True,
-        label='希望ランク',
-        widget=forms.widgets.Select
-    )
-
-    rnk_max= forms.fields.ChoiceField(
-        choices = ranks,
-        required=True,
-        label='希望ランク',
-        widget=forms.widgets.Select
-    )
-
-    #人数
-
-    num = forms.fields.ChoiceField(
-        choices = nums,
-        required = True,
-        label = '希望人数',
-        widget=forms.widgets.Select
-    )
-
-    #ゲームモード
-
-    per = forms.fields.ChoiceField(
-        choices = pers,
-        required=True,
-        label = '目的',
-        widget=forms.widgets.Select
-    )
-
-    #プレイ環境
-
-    hard = forms.fields.ChoiceField(
-        choices = p_field,
-        required=True,
-        label = '使用機器',
-        widget=forms.RadioSelect()
-    )
-
-    class Meta:
-        model = article_form
-        fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard', 'vc')
-
 
 #ユーザー作成フォーム
 
@@ -149,6 +99,10 @@ class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
 
     comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    icon = forms.ImageField(required=False)
+
+    discord_id = forms.CharField(required=False)
 
     rank = forms.ChoiceField(
         choices=ranks,
@@ -173,8 +127,8 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('icon', 'username', 'player_name', 'email', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'discord_id', 'password1', 'comments', 'character')
-        
+        fields = ('icon', 'username', 'player_name', 'email', 'playfield', 'rank', 'discord_id', 'password1', 'comments', 'character')
+
         def save(self, commit=True):
             user = super().save(commit=False)
             validate_password(self.cleaned_data['password1'], user)
@@ -213,7 +167,7 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('icon', 'username', 'email', 'player_name', 'playfield', 'rank', 'twitter_id', 'Youtube_url', 'comments', 'character', 'discord_id')
+        fields = ('icon', 'username', 'email', 'player_name', 'playfield', 'rank', 'comments', 'character', 'discord_id')
 
         def clean_password(self):
             return self.initial["password"]
@@ -255,4 +209,14 @@ class NewsForm(forms.ModelForm):
 
     class Meta:
         model = NewsModel
-        fields = ('title', 'tags', 'about')
+        fields = ('title',)
+
+#情報交換コメント
+
+class NewsCommentForm(forms.ModelForm):
+
+    comment = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
+
+    class Meta:
+        model = NewsComments
+        fields = ('comment',)

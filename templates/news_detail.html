@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<div class="news-detail-main">
+    <div class="news-detail">
+        <h2>{{ object.title }}</h2>
+    </div>
+    <div class="news-comment">
+        {% for comment in object.newscomments_set.all %}
+        <div class="comment-count">
+            <p>{{ forloop.counter }}</p>
+        </div>
+        <div class="comment-user">
+            <p>{{ comment.user }}</p>
+        </div>
+        <div class="comment-date">
+            <p>{{ comment.date }}</p>
+        </div>
+        <div class="comment-text">
+            <p>{{ comment.comment }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="comment-create">
+        <h3>書き込み</h3>
+        <form action="{% url 'main:News_Comment' object.pk %}" method="post">
+            {% csrf_token %}
+            <p>{{ comment_form.comment }}</p>
+            <button type="submit">送信</button>
+        </form>
+    </div>
+</div>
+{% endblock body %}

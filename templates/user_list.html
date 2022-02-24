@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+<link rel=stylesheet type=text/css href="{% static 'css/user_list.css' %}" />
+<div class="user-list">
+    <h3 class="u-list-h3">Search for Legends</h3>
+    <div class="user-search">
+        <form class="user-search-f" method="GET" action="{% url 'main:User_List' %}">
+            <input type="text" name="keyword" placeholder="ユーザー名 or プレイヤー名検索" class="input-keyword">
+            <select class="user-search-rank" name="rank" class="u-s-rank">
+                <option value="">ランク指定なし</option>
+                <option value="ブロンズ4">ブロンズ4</option>
+                <option value="ブロンズ3">ブロンズ3</option>
+                <option value="ブロンズ2">ブロンズ2</option>
+                <option value="ブロンズ1">ブロンズ1</option>
+                <option value="シルバー4">シルバー4</option>
+                <option value="シルバー3">シルバー3</option>
+                <option value="シルバー2">シルバー2</option>
+                <option value="シルバー1">シルバー1</option>
+                <option value="ゴールド4">ゴールド4</option>
+                <option value="ゴールド3">ゴールド3</option>
+                <option value="ゴールド2">ゴールド2</option>
+                <option value="ゴールド1">ゴールド1</option>
+                <option value="プラチナ4">プラチナ4</option>
+                <option value="プラチナ3">プラチナ3</option>
+                <option value="プラチナ2">プラチナ2</option>
+                <option value="プラチナ1">プラチナ1</option>
+                <option value="ダイヤ4">ダイヤ4</option>
+                <option value="ダイヤ3">ダイヤ3</option>
+                <option value="ダイヤ2">ダイヤ2</option>
+                <option value="ダイヤ1">ダイヤ1</option>
+                <option value="マスター">マスター</option>
+                <option value="プレデター">プレデター</option>
+            </select>
+            <h4>プレイ環境指定</h4>
+            <div class="u-s-hard">
+            <input type="checkbox" id="user-search-hard" value="Switch" name="hard">Switch
+            <input type="checkbox" id="user-search-hard" value="PS4" name="hard">PS4
+            <input type="checkbox" id="user-search-hard" value="PS5" name="hard">PS5
+            <input type="checkbox" id="user-search-hard" value="PC" name="hard">PC
+            <input type="checkbox" id="user-search-hard" value="Xbox" name="hard">Xbox
+            </div>
+            </br>
+            <h4>レジェンド指定</h4>
+            <div class="u-s-character">
+            <input type="checkbox" id="user-search-character" value="ブラッドハウンド" name="character">ブラッドハウンド
+            <input type="checkbox" id="user-search-character" value="ジブラルタル" name="character">ジブラルタル
+            <input type="checkbox" id="user-search-character" value="ライフライン" name="character">ライフライン
+            <input type="checkbox" id="user-search-character" value="パスファインダー" name="character">パスファインダー
+            <input type="checkbox" id="user-search-character" value="レイス" name="character">レイス
+            <input type="checkbox" id="user-search-character" value="バンガロール" name="character">バンガロール
+            <input type="checkbox" id="user-search-character" value="コースティック" name="character">コースティック</br>
+            <input type="checkbox" id="user-search-character" value="ミラージュ" name="character">ミラージュ
+            <input type="checkbox" id="user-search-character" value="オクタン" name="character">オクタン
+            <input type="checkbox" id="user-search-character" value="ワットソン" name="character">ワットソン
+            <input type="checkbox" id="user-search-character" value="クリプト" name="character">クリプト
+            <input type="checkbox" id="user-search-character" value="レブナント" name="character">レブナント
+            <input type="checkbox" id="user-search-character" value="ローバ" name="character">ローバ
+            <input type="checkbox" id="user-search-character" value="ランパート" name="character">ランパート
+            <input type="checkbox" id="user-search-character" value="ホライゾン" name="character">ホライゾン
+            <input type="checkbox" id="user-search-character" value="ヒューズ" name="character">ヒューズ</br>
+            <input type="checkbox" id="user-search-character" value="ヴァルキリー" name="character">ヴァルキリー
+            <input type="checkbox" id="user-search-character" value="シア" name="character">シア
+            <input type="checkbox" id="user-search-character" value="アッシュ" name="character">アッシュ
+            <input type="checkbox" id="user-search-character" value="マッドマギー" name="character">マッドマギー
+            </div>
+            </br>
+            <button type="submit"><img src="{% static 'img/mushimegane.png' %}" height="20" width="20px"/></button>
+        </form>
+    </div>
+    <div class="user-list-link">
+        {% for list in object_list %}
+        <ul class="user-list-ul">
+            <li>    
+            <a href="{% url 'main:User_Detail' list.pk %}" class="users">
+                <p class="player-icon">{% if list.icon %}<img src="{{ list.icon.url }}" height="60px" width="60px"/>{% else %}<img src={% static 'img/icon_none.jpg' %} height="60px" width="60px" />{% endif %}</p>
+                <p class="player-name">{{ list.player_name }}</p>
+                <p class="any-info">@{{ list.username }} &nbsp; RANK : {{ list.rank }} &nbsp; プレイ環境 : {% for hard in list.split_playfield %}{{ hard }}{% endfor %}</p>
+                <p class="any-info2">よく使うレジェンド : 
+                    {% for character in list.split_character %}
+                    {{ character }}
+                    {% endfor %}
+                </p>
+            </a>
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+</div>
+{% endblock body %}
+

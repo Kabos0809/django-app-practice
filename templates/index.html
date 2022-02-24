@@ -3,7 +3,7 @@
 {% load static %}
 <link rel=stylesheet type=text/css href="{% static 'css/index.css' %}" />
 <div class="main-index">
-    <h2>Hello!</h2>
+    <h2>Hi! {{ user.username }} 今日は誰を探すんだい？</h2>
     <a href="{% url 'main:Create_Main' %}" class="f-form">form</a> &nbsp;
     <a href="{% url 'main:Article_List' %}" class="f-list">list</a>
 </div>

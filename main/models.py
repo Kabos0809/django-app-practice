@@ -1,5 +1,4 @@
-from taggit.managers import TaggableManager
-from taggit.models import GenericUUIDTaggedItemBase, TaggedItemBase
+from distutils.command.upload import upload
 from django.conf import settings
 from django.db import models
 from uuid import uuid4
@@ -9,11 +8,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.core.mail import send_mail
-
-class UUIDTaggedItem(GenericUUIDTaggedItemBase, TaggedItemBase):
-    class Meta:
-        verbose_name =  ("Tag")
-        verbose_name_plural =  ("Tags")
+import re
 
 class MyUserManager(BaseUserManager):
     use_in_migrations = True
@@ -48,7 +43,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False, unique=True)
     player_name = models.CharField(_("player name"), max_length=30, unique=True)
-    icon = models.ImageField(blank=True, null=True)
+    icon = models.ImageField(_("icon"), upload_to='user_icon/', blank=True, null=True)
     email = models.EmailField(_("email_address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
     is_superuser = models.BooleanField(_("superuser status"), default=False)
@@ -56,11 +51,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     playfield = models.CharField(_("ply_f"), max_length=30, blank=True)
     rank = models.CharField(_("rank"), max_length=30, blank=False)
-    twitter_id = models.CharField(_("twitter id"), max_length=100, blank=True)
-    Youtube_url = models.CharField(_("YouTube CHANNEL"), max_length=100, blank=True)
     discord_id = models.CharField(_("discord"), max_length=100, blank=True)
-    comments = models.CharField(max_length=300, blank=True, default="自己紹介はありません")
-    character = models.CharField(max_length=30, blank=True)
+    comments = models.CharField(_("comments"), max_length=300, blank=True, default="自己紹介はありません")
+    character = models.CharField(_("character"), max_length=30, blank=True)
 
     objects = MyUserManager()
     USERNAME_FIELD = "username"
@@ -79,9 +72,20 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def split_playfield(self):
+        a = self.playfield
+        a = re.sub(r'[\]\[\']', '', a)
+        a = a.split(',')
+        return a
+
+    def split_character(self):
+        a = self.character
+        a = re.sub(r'[\]\[\']', '', a)
+        a = a.split(',')
+        return a
+
     def __str__(self):
         return self.player_name
-
 
 class article_form(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
@@ -115,8 +119,17 @@ class NewsModel(models.Model):
     id = models.UUIDField(primary_key=True, editable=False, default=uuid4)
     title = models.CharField(max_length=50)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
-    tags = TaggableManager(blank=True, through=UUIDTaggedItem)
     date = models.DateTimeField(default=timezone.now())
-    about = models.CharField(max_length=2000)
+
+    def __str__(self):
+        return self.title
     
-#class NewsComments(models.Model):
+class NewsComments(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
+    news = models.ForeignKey(NewsModel, editable=False, on_delete=models.PROTECT)
+    date = models.DateTimeField(default=timezone.now())
+    comment = models.CharField(max_length=140)
+
+    def __str__(self):
+        return self.comment
+    

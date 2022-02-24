@@ -1,29 +1,38 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-<center>
+<link rel=stylesheet type=text/css href="{% static 'css/search.css' %}" />
 <div class="news-main">
+    <h2>掲示板一覧</h2>
     <div class="news-search">
         <form class="search-form" method="GET" action="{% url 'main:News_List' %}">
-            <input class="t-box" type="text" name="keyword" placeholder="キーワード検索">
-            <p class="s-tags">タグ検索 : <input class="c-box-tag" type="checkbox" name="tags"></p>
+            <input class="t-box" type="text" name="keyword" placeholder="スレタイ検索">
             <button class="s-btn" type="submit">検索</button>
             {% csrf_token %}
         </form>
     </div>
     <div class="news-list">
         {% for list in object_list %}
-        <ul class="li">
+        <ul class="news-ul">
             <li>
-                <a href="{% url 'main:News_Detail' list.pk %}">
-                    タイトル : {{ list.title }} </br>
-                    関連タグ : {{ list.tags }} </br>
-                    投稿日時 : {{ list.date }}</br>
-                    本文 : {{ list.about | linebreaksbr }}</a>
+                <a href="{% url 'main:News_Detail' list.pk %}" class="news-thread">
+                    {{ forloop.counter }} &nbsp;
+                    スレタイ : {{ list.title }}
+                    &nbsp; 作成日時 : {{ list.date }}
+                </a>
             </li>
         </ul>
         {% endfor %}
     </div>
-    <a href="{% url 'main:News_Create' %}">投稿</a>
+    <div class="news-create">
+        <h3>新たにスレッドを作成する</h3>
+        <form method="post" enctype="multipart/form-data" class="news-create-form">
+            <div class="form-title">
+                <p>スレタイ : {{ news_form.title }}</p>
+            </div>
+            <button type="submit">作成</button>
+            {% csrf_token %}
+        </form>
+    </div>
 </div>
 {% endblock body %}

@@ -1,6 +1,14 @@
 .main-index{
     position: relative;
     margin-left: 400px;
+    margin-top: 35px;
     font-weight: bold;
     color: #49494d;
+    background-color: #fff;
+    width: 700px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    border: 1px solid #c9c9c9;
 }
