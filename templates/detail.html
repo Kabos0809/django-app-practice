@@ -1,22 +1,44 @@
 {% extends 'base.html' %}
 {% block body %}
-<div class="main">
-    <div class="title">
-        <h1>{{ object.title }}</h1>
-    </div>
-    <br>
+{% load static %}
+<link rel=stylesheet type=text/css href="{% static 'css/detail.css' %}" />
+<div class="main-detail">
+    <h3 class="recruit">Recruit</h3>
     <div class="author">
-    <a>プレイヤー名 : {{ object.user }}</a>
+    <a href="{% url 'main:User_Detail' object.user.pk %}">
+        {% if object.user.icon %}<img src="{{ object.user.icon.url }}" height="35px" width="35px" >{% else %}<img src="{% static 'img/icon_none.jpg' %}" height="35px" width="35px">{% endif %}
+        {{ object.user }}</a>
+    </div>
+    <div class="title">
+        <h3>{{ object.title }}</h3>
     </div>
     <div class="categories">
-        <p>プレイ環境 : {{ object.hard }}</p>
-        <p>希望ランク : {{ object.rnk_min }} ～ {{ object.rnk_max }}</p>
-        <p>希望人数 : {{ object.num }} &nbsp; モード : {{ object.per }}</p>
-        <p>VC : {{ object.vc }}</p>
+        <p class="hard">プレイ環境 : {{ object.hard }}</p>
+        <p class="rank">希望ランク : {{ object.rnk_min }} ～ {{ object.rnk_max }}</p>
+        <p class="num">希望人数 : {{ object.num }} <p class="per">モード : {{ object.per }}</p>
+        <p class="vc">VC : {{ object.vc }}</p>
     </div>
     <div class="comment">    
         <p>募集に当たって : </p>
         <p>{{ object.comments | linebreaksbr }}</p>
+    </div>
+    <div class="comment">
+        <h5>コメント</h5>
+        <form class="comment-form" action="{% url 'main:Article_Comment' object.pk %}" method="POST">
+            {% csrf_token %}
+            <p>{{ comment.comment }}</p>
+            <button class="comment-submit" type="submit">送信</button>
+        </form>
+    </div>
+    <div class="comment-list">
+        {% for comment in object.article_comment_set.all %}
+        <ul class="c-list-ul">
+            <li><a href="{% url 'main:User_Detail' comment.user.pk %}"><p class="comment-user-icon">{% if comment.user.icon %}<img src="{{ comment.user.icon.url }}" height="40px" width="40px"/>{% else %}<img src={% static 'img/icon_none.jpg' %} height="40px" width="40px" />{% endif %}</p>
+                <p class="comment-user-name">{{ comment.user.player_name }}</p></a>
+                <p class="comment-p">{{ comment.comment }}</p>
+            </li>
+        </ul>
+        {% endfor %}
     </div>
     <div class="menu">
         <a href="{% url 'main:Article_List' %}">戻る</a>

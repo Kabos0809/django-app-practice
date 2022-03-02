@@ -6,7 +6,7 @@
         <h2>{{ object.title }}</h2>
     </div>
     <div class="news-comment">
-        {% for comment in object.newscomments_set.all %}
+        {% for comment in object.threadcomments_set.all %}
         <div class="comment-count">
             <p>{{ forloop.counter }}</p>
         </div>
@@ -23,7 +23,7 @@
     </div>
     <div class="comment-create">
         <h3>書き込み</h3>
-        <form action="{% url 'main:News_Comment' object.pk %}" method="post">
+        <form action="{% url 'main:Thread_Comment' object.pk %}" method="post">
             {% csrf_token %}
             <p>{{ comment_form.comment }}</p>
             <button type="submit">送信</button>

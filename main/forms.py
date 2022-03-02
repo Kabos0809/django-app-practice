@@ -1,14 +1,10 @@
-from dataclasses import fields
-from email.policy import default
-import encodings
-from enum import unique
 from django import forms
-from .models import CustomUser, NewsComments, article_form, reportModel, NewsModel
+from .models import CustomUser, ThreadComments, article_comment, article_form, reportModel, ThreadModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth.password_validation import validate_password
 
-characters = (('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
+characters = (('設定なし', '設定なし'), ('ブラッドハウンド', 'ブラッドハウンド'), ('ジブラルタル', 'ジブラルタル'), ('ライフライン', 'ライフライン'), ('パスファインダー', 'パスファインダー'), ('レイス', 'レイス'),
                 ('バンガロール', 'バンガロール'), ('コースティック', 'コースティック'), ('ミラージュ', 'ミラージュ'), ('オクタン', 'オクタン'), ('ワットソン', 'ワットソン'), ('クリプト', 'クリプト'),
                 ('レヴナント', 'レヴナント'), ('ローバ', 'ローバ'), ('ランパート', 'ランパート'), ('ホライゾン', 'ホライゾン'), ('ヒューズ', 'ヒューズ'), ('シア', 'シア'), ('アッシュ', 'アッシュ'), ('マッドマギー', 'マッドマギー'))
 
@@ -25,7 +21,7 @@ nums = (('1人', '1人'), ('2人', '2人'), ('大会参加者募集', '大会参
 pers = (('ランク', 'ランク'), ('Duoカジュアル', 'Duoカジュアル'), ('Trioカジュアル', 'Trioカジュアル'), ('アリーナ', 'アリーナ'), ('アリーナランク', 'アリーナランク'),
         ('タイマン', 'タイマン'), ('大会', '大会'))
 
-p_field = (('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
+p_field = (('設定なし', '設定なし'), ('Switch', 'Switch'), ('PS4', 'PS4'), ('PS5', 'PS5'), ('PC', 'PC'), ('Xbox', 'Xbox'))
 
 vcs = (('なし', 'なし'), ('discord', 'discord'), ('ゲーム内VC', 'ゲーム内VC'), ('その他VC', 'その他VC'))
 
@@ -92,11 +88,22 @@ class categorie_form(forms.ModelForm):
         model = article_form
         fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard', 'vc')
 
+#募集へのコメント
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = article_comment
+        fields = ('comment',)
+
 
 #ユーザー作成フォーム
 
 class UserCreationForm(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+
+    confirm_password = forms.CharField(label='パスワード再入力', widget=forms.PasswordInput)
+
+    username = forms.CharField(label="username")
 
     comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
@@ -131,11 +138,20 @@ class UserCreationForm(forms.ModelForm):
 
         def save(self, commit=True):
             user = super().save(commit=False)
+            icon = self.cleaned_data['icon']
             validate_password(self.cleaned_data['password1'], user)
             user.set_passoword(self.cleaned_data["password1"])
+            user.icon = icon
             if commit:
                 user.save()
             return user
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password1')
+        confirm_password = cleaned_data.get('confirm_password')
+        if password != confirm_password:
+            raise forms.ValidationError('パスワードが一致しません') 
 
 #ユーザー情報修正フォーム
 
@@ -184,8 +200,6 @@ class LoginForm(auth_forms.AuthenticationForm):
 
 class ReportForm(forms.ModelForm):
 
-    article_id = forms.CharField(required=True)
-
     categories = (('スパム', 'スパム'), ('出会いなどを誘うような内容', '出会いなどを誘うような内容'), ('公序良俗に反する内容', '公序良俗に反する内容'), ('暴言・脅迫・誹謗中傷', '暴言・脅迫・誹謗中傷'), ('その他', 'その他'))
 
     category = forms.ChoiceField(
@@ -199,7 +213,7 @@ class ReportForm(forms.ModelForm):
 
     class Meta:
         model = reportModel
-        fields = ('article_id', 'category', 'matters', 'not_mischief')
+        fields = ('category', 'matters', 'not_mischief')
 
 #情報交換
 
@@ -208,7 +222,7 @@ class NewsForm(forms.ModelForm):
     about = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
     class Meta:
-        model = NewsModel
+        model = ThreadModel
         fields = ('title',)
 
 #情報交換コメント
@@ -218,5 +232,5 @@ class NewsCommentForm(forms.ModelForm):
     comment = forms.CharField(required=True, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
     class Meta:
-        model = NewsComments
+        model = ThreadComments
         fields = ('comment',)

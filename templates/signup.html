@@ -4,19 +4,35 @@
 <link rel=stylesheet type=text/css href="{% static 'css/signup.css' %}" />
 <div class="registration">
 <div class="regform">
-    <form action="" method="POST">    
+    <form action="" method="POST" enctype="multipart/form-data">    
         <h2>ユーザー情報登録</h2>
         <div class="username">
             <p>ユーザーネーム : {{ form.username }} ※30文字以内半角英数字</p>
+            {% if form.username.errors %}
+            <p>{{ form.username.errors }}</p>
+            {% endif %}
         </div>
         <div class="user_id">
             <p>Apex内のプレイヤー名 : {{ form.player_name }} ※30文字以内</p>
         </div>
         <div class="email">
             <p>Email : {{ form.email }} ※必須です</p>
+            {% if form.email.errors %}
+            <p>{{ form.email.errors }}</p>
+            {% endif %}
         </div>
         <div class="password1">
             <p>パスワード : {{ form.password1 }} ※半角英数字で8文字以上</p>
+        </div>
+        <div class="confirm-password">
+            <p>パスワード(再入力) : {{ form.confirm_password }}</p>
+            {% if form.errors %}
+            <ul>
+                {% for error in form.non_field_errors %}
+                <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
         </div>
         <div class="playfield">
             <p>プレイ環境 : 

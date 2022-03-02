@@ -47,19 +47,19 @@
             <input type="checkbox" id="user-search-character" value="ジブラルタル" name="character">ジブラルタル
             <input type="checkbox" id="user-search-character" value="ライフライン" name="character">ライフライン
             <input type="checkbox" id="user-search-character" value="パスファインダー" name="character">パスファインダー
-            <input type="checkbox" id="user-search-character" value="レイス" name="character">レイス
+            <input type="checkbox" id="user-search-character" value="レイス" name="character">レイス</br>
             <input type="checkbox" id="user-search-character" value="バンガロール" name="character">バンガロール
-            <input type="checkbox" id="user-search-character" value="コースティック" name="character">コースティック</br>
+            <input type="checkbox" id="user-search-character" value="コースティック" name="character">コースティック
             <input type="checkbox" id="user-search-character" value="ミラージュ" name="character">ミラージュ
             <input type="checkbox" id="user-search-character" value="オクタン" name="character">オクタン
             <input type="checkbox" id="user-search-character" value="ワットソン" name="character">ワットソン
-            <input type="checkbox" id="user-search-character" value="クリプト" name="character">クリプト
+            <input type="checkbox" id="user-search-character" value="クリプト" name="character">クリプト</br>
             <input type="checkbox" id="user-search-character" value="レブナント" name="character">レブナント
             <input type="checkbox" id="user-search-character" value="ローバ" name="character">ローバ
             <input type="checkbox" id="user-search-character" value="ランパート" name="character">ランパート
             <input type="checkbox" id="user-search-character" value="ホライゾン" name="character">ホライゾン
-            <input type="checkbox" id="user-search-character" value="ヒューズ" name="character">ヒューズ</br>
-            <input type="checkbox" id="user-search-character" value="ヴァルキリー" name="character">ヴァルキリー
+            <input type="checkbox" id="user-search-character" value="ヒューズ" name="character">ヒューズ
+            <input type="checkbox" id="user-search-character" value="ヴァルキリー" name="character">ヴァルキリー</br>
             <input type="checkbox" id="user-search-character" value="シア" name="character">シア
             <input type="checkbox" id="user-search-character" value="アッシュ" name="character">アッシュ
             <input type="checkbox" id="user-search-character" value="マッドマギー" name="character">マッドマギー
@@ -74,13 +74,14 @@
             <li>    
             <a href="{% url 'main:User_Detail' list.pk %}" class="users">
                 <p class="player-icon">{% if list.icon %}<img src="{{ list.icon.url }}" height="60px" width="60px"/>{% else %}<img src={% static 'img/icon_none.jpg' %} height="60px" width="60px" />{% endif %}</p>
-                <p class="player-name">{{ list.player_name }}</p>
-                <p class="any-info">@{{ list.username }} &nbsp; RANK : {{ list.rank }} &nbsp; プレイ環境 : {% for hard in list.split_playfield %}{{ hard }}{% endfor %}</p>
+                <p class="player-name">{{ list.player_name }} &nbsp; (@{{ list.username }})</p>
+                <p class="any-info">RANK : {{ list.rank }} &nbsp; プレイ環境 : {% for hard in list.split_playfield %}{{ hard }}{% endfor %}</p>
                 <p class="any-info2">よく使うレジェンド : 
                     {% for character in list.split_character %}
                     {{ character }}
                     {% endfor %}
                 </p>
+                <p class="last-login">最終ログイン : {{ list.last_login }}</p>
             </a>
             </li>
         </ul>

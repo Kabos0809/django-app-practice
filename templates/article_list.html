@@ -4,59 +4,63 @@
 <link rel=stylesheet type=text/css href="{% static 'css/list.css' %}" />
 <div class="article_list">
     <h3>募集一覧</h3>
-    <hr class="list-h3-below">
-    <form class="s-r" method="GET" action="{% url 'main:Article_List' %}">
-        <input class="s-k-recruit" type="text" name="keyword" placeholder="キーワード検索">
-        <select class="s-c-recruit" name="category">
-            <option value="">モード指定なし</option>
-            <option value="ランク">ランク</option>
-            <option value="Duoカジュアル">Duoカジュアル</option>
-            <option value="Trioカジュアル">Trioカジュアル</option>
-            <option value="アリーナ">アリーナ</option>
-            <option value="アリーナランク">アリーナランク</option>
-            <option value="タイマン">タイマン</option>
-            <option vlaue="大会">大会</option>
-        </select>
-        <select class="s-n-recruit" name="num">
-            <option value="">人数指定なし</option>
-            <option value="1人">1人</option>
-            <option value="2人">2人</option>
-            <option value="大会参加者募集">大会参加者募集</option>
-        </select>
-        <select class="s-v-recruit" name="vc">
-            <option value="">VC指定なし</option>
-            <option value="なし">なし</option>
-            <option value="discord">discord</option>
-            <option value="ゲーム内VC">ゲーム内VC</option>
-            <option value="その他VC">その他VC</option>
-        </select>
-        <select class="s-h-recruit" name="hard">
-            <option value="">プレイ環境指定なし</option>
-            <option value="Switch">Switch</option>
-            <option value="PS4">PS4</option>
-            <option value="PS5">PS5</option>
-            <option value="PC">PC</option>
-            <option value="Xbox">Xbox</option>
-        </select>
-        <button type="submit"><img src="{% static 'img/mushimegane.png' %}" height="20" width="20px"/></button>
-    </form>
-    {% for list in object_list %}
-    <ul class="artli">
-        <li>
+    <div class="s-r-f">
+        <form class="s-r" method="GET" action="{% url 'main:Article_List' %}">
+            <input class="s-k-recruit" type="text" name="keyword" placeholder="キーワード検索">
+            <select class="s-c-recruit" name="category">
+                <option value="">モード指定なし</option>
+                <option value="ランク">ランク</option>
+                <option value="Duoカジュアル">Duoカジュアル</option>
+                <option value="Trioカジュアル">Trioカジュアル</option>
+                <option value="アリーナ">アリーナ</option>
+                <option value="アリーナランク">アリーナランク</option>
+                <option value="タイマン">タイマン</option>
+                <option vlaue="大会">大会</option>
+            </select>
+            <select class="s-n-recruit" name="num">
+                <option value="">人数指定なし</option>
+                <option value="1人">1人</option>
+                <option value="2人">2人</option>
+                <option value="大会参加者募集">大会参加者募集</option>
+            </select>
+            <select class="s-v-recruit" name="vc">
+                <option value="">VC指定なし</option>
+                <option value="なし">なし</option>
+                <option value="discord">discord</option>
+                <option value="ゲーム内VC">ゲーム内VC</option>
+                <option value="その他VC">その他VC</option>
+            </select>
+            <select class="s-h-recruit" name="hard">
+                <option value="">プレイ環境指定なし</option>
+                <option value="Switch">Switch</option>
+                <option value="PS4">PS4</option>
+                <option value="PS5">PS5</option>
+                <option value="PC">PC</option>
+                <option value="Xbox">Xbox</option>
+            </select>
+            <button type="submit"><img src="{% static 'img/mushimegane.png' %}" height="20" width="20px"/></button>
+        </form>
+    </div>
+    <div class="list">
+        {% for list in object_list %}
+        <ul class="artli">
+            <li>
                 {% if list.user_id == user.id %}
-                <a href="" class="update-link">編集</a>
                 {% else %}
                 <a href="{% url 'main:Report' %}" class="report-form">違反報告</a>
                 {% endif %}</br>  
                 <a href="{% url 'main:Article_Detail' list.pk %}" class="post">
-                    プレイヤー名 : {{ list.user.player_name }} &nbsp; </br>
-                    タイトル : {{ list.title }}</br>
-                    希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }} &nbsp; </br>
-                    プレイ環境 : {{ list.hard }} &nbsp; VC : {{ list.vc }} &nbsp; 投稿日時 : {{ list.date }}
-                    <p>id : {{ list.id }}</p>
+                    {% if list.user.icon %}<img src="{{ list.user.icon.url }}" width="40px" height="40px">{% else %}<img src="{% url 'static:img/icon_none.jpg' %}" width="40px" height="40px">{% endif %}
+                    <p class="art-username">{{ list.user.player_name }}</p>
+                    <p class="art-title">{{ list.title }}</p>
+                    <p class="art-info1">希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }}</p>
+                    <p class="art-info2">プレイ環境 : {{ list.hard }} &nbsp; VC : {{ list.vc }}</p>
+                    <p class="date">投稿日時 : {{ list.date }}</p>
+                    <p class="id">id : {{ list.id }}</p>
                 </a>
-        </li>
-    </ul>
-    {% endfor %}
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
 </div>
 {% endblock body %}

@@ -3,8 +3,8 @@ from django.contrib import messages
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from .models import CustomUser, NewsComments, NewsModel, article_form, reportModel
-from .forms import NewsCommentForm, NewsForm, ReportForm, UserCreationForm, categorie_form, LoginForm
+from .models import CustomUser, ThreadComments, ThreadModel, article_comment, article_form, reportModel
+from .forms import CommentForm, NewsCommentForm, NewsForm, ReportForm, UserCreationForm, categorie_form, LoginForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -243,13 +243,36 @@ class Article_list(ListView):
 
         return queryset
 
+#募集詳細
 
 class Article_detail(DetailView):
     template_name = 'detail.html'
     model = article_form
-    context_object_name = 'object'
     queryset = article_form.objects.all()
-    
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['comment'] = CommentForm
+
+        return context
+
+#募集に対するコメント
+
+class Article_CommentView(CreateView):
+    model = article_comment
+    form_class = CommentForm
+
+    def form_valid(self, form):
+        post_pk = self.kwargs.get('pk')
+        post = get_object_or_404(article_form, pk=post_pk)
+        form.instance.user = self.request.user
+        comment = form.save(commit=False)
+        comment.article = post
+        comment.save()
+        return redirect('main:Article_Detail', pk=post_pk)
+
+
 #サインアップ
 
 def signup(request):
@@ -288,9 +311,7 @@ class signupcomplete(TemplateView):
 class ReportView(CreateView):
     model = reportModel
     form_class = ReportForm
-    template_name = 'report.html'
-    success_url = reverse_lazy('main:Article_List')
-   
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         messages.success(self.request, '報告が完了しました')
@@ -308,32 +329,24 @@ class ReportCompView(TemplateView):
 #News作成
 
 class NewsCreateView(CreateView):
-    template_name = 'news_list.html'
+    template_name = "thread_create.html"
     form_class = NewsForm
-    success_url = reverse_lazy('main:News_List')
+    success_url = reverse_lazy('main:Thread_List')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()
-        return redirect('main:News_List')
+        return redirect('main:Thread_List')
 
 #News一覧
 
 class NewsListView(ListView):
-    model = NewsModel
+    model = ThreadModel
     template_name = 'news_list.html'
     ordering = ['-date']
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        context['news_form'] = NewsCreateView
-
-        return context
-        
-
     def get_queryset(self):
-        queryset = NewsModel.objects.order_by('-date')
+        queryset = ThreadModel.objects.order_by('-date')
         keyword = self.request.GET.get('keyword')
 
         if keyword:
@@ -345,9 +358,9 @@ class NewsListView(ListView):
         return queryset
     
 class NewsDetailView(LoginRequiredMixin, DetailView):
-    model = NewsModel
+    model = ThreadModel
     template_name = 'news_detail.html'
-    queryset = NewsModel.objects.all()
+    queryset = ThreadModel.objects.all()
     login_url = 'login/'
 
     def get_context_data(self, **kwargs):
@@ -360,18 +373,17 @@ class NewsDetailView(LoginRequiredMixin, DetailView):
 #コメント作成view
 
 class NewsCommentView(CreateView):
-    model = NewsComments
+    model = ThreadComments
     form_class = NewsCommentForm
 
     def form_valid(self, form):
         post_pk = self.kwargs.get('pk')
-        post = get_object_or_404(NewsModel, pk=post_pk)
+        post = get_object_or_404(ThreadModel, pk=post_pk)
         form.instance.user = self.request.user
         comment = form.save(commit=False)
         comment.news = post
         comment.save()
-        messages.success(self.request, '投稿が完了しました')
-        return redirect('main:News_Detail', pk=post_pk)
+        return redirect('main:Thread_Detail', pk=post_pk)
 
 #Search.htmlリスト
 
@@ -383,7 +395,7 @@ class SearchListView(ListView):
         context = super(SearchListView, self).get_context_data(**kwargs)
         context.update({
             'user':CustomUser.objects.all(),
-            'news': NewsModel.objects.all()
+            'news': ThreadModel.objects.all()
         })
         return context
 
@@ -392,6 +404,7 @@ class SearchListView(ListView):
 class UserListView(ListView):
     model = CustomUser
     template_name = "user_list.html"
+    ordering = ['-last_login']
 
     def get_queryset(self):
         queryset = CustomUser.objects.all()
