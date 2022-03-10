@@ -27,24 +27,24 @@
     left: -20px;
     padding: 10px;
     padding-top: 20px;
-    padding-bottom: 50px;
+    padding-bottom: 30px;
     width: 701px;
     border-top: 1px solid #c0c0c0;
     margin-bottom: 50px;
 }
 
-.article_list > .list > .artli {
+.article_list > .contents > .content-list {
     position: relative;
     top: 0px;
     padding-bottom: 50px;
 }
 
-.article_list > .list > .artli > li{
+.article_list > .contents > .content-list > li{
     position: relative;
     list-style: none;
 }
 
-.article_list > .list > .artli > li > .post{
+.article_list > .contents > .content-list > li > .post{
     position: relative;
     text-decoration: none;
     background-color: #fff;
@@ -63,44 +63,44 @@
     border-bottom: 1px solid #c0c0c0;
 }
 
-.article_list > .list > .artli > li > .post:hover{
+.article_list > .contents > .content-list > li > .post:hover{
     background-color: #e6e6e6;
 }
 
-.article_list > .list > .artli > li > .post > .art-username{
+.article_list > .contents > .content-list > li > .post > .art-username{
     position: relative;
     top: -50px;
     margin-left: 570px;
     font-size: 18px;
 }
 
-.article_list > .list > .artli > li > .post > img{
+.article_list > .contents > .content-list > li > .post > img{
     position: relative;
     left: 520px;
 }
 
-.article_list > .list > .artli > li > .post > .art-title{
+.article_list > .contents > .content-list > li > .post > .art-title{
     position: relative;
     top: -105px;
     font-size: 25px;
 }
 
-.article_list > .list > .artli > li > .post > .art-info1{
+.article_list > .contents > .content-list > li > .post > .art-info1{
     position: relative;
     top: -110px;
 }
 
-.article_list > .list > .artli > li > .post > .art-info2{
+.article_list > .contents > .content-list > li > .post > .art-info2{
     position: relative;
     top: -110px;
 }
 
-.article_list > .list > .artli > li > .post > .date{
+.article_list > .contents > .content-list > li > .post > .date{
     position: relative;
     top: -110px;
 }
 
-.article_list > .list > .artli > li > a > .id{
+.article_list > .contents > .content-list > li > a > .id{
     position: relative;
     width: 500px;
     font-size: 8px;
@@ -109,7 +109,7 @@
     left: 425px;
 }
 
-.article_list > .list > .artli > li > .update-link{
+.article_list > .contents > .content-list > li > .update-link{
     position: relative;
     top: 29.5px;
     left: 577px;
@@ -123,11 +123,11 @@
     transition: .2s;
 }
 
-.article_list > .list > .artli > li > .update-link:hover{
+.article_list > .contents > .content-list > li > .update-link:hover{
     background-color: #6685c6;
 }
 
-.article_list > .list > .artli > li > .report-form{
+.article_list > .contents > .content-list > li > .report-form{
     position: relative;
     top: 29.5px;
     left: 546px;
@@ -141,7 +141,7 @@
     transition: .2s;
 }
 
-.article_list > .list > .artli > li > .report-form:hover{
+.article_list > .contents > .content-list > li > .report-form:hover{
     background-color: #663d46;
 }
 
@@ -153,52 +153,67 @@
 .article_list > .s-r-f > .s-r > .s-k-recruit{
     position: relative;
     height: 40px;
-    width: 600px;
-    left: 50px;
-    border-radius: 5px;
+    width: 510px;
+    left: 40px;
+    border-radius: 20px;
+    border: 1px solid #fff;
     border-color: #c0c0c0;
+    padding-left: 10px;
 }
 
 .article_list > .s-r-f > .s-r > .s-c-recruit{
     position: relative;
-    margin-top: 20px;
-    left: 80px;
+    top:  10px;
+    left: 60px;
     height:20px;
     width: 120px;
+    border-radius: 10px;
+    border-color: #c0c0c0;
 }
 
 .article_list > .s-r-f > .s-r > .s-n-recruit{
     position: relative;
-    margin-top: 20px;
-    left: 80px;
+    top: -10px;
+    left: 200px;
     height: 20px;
     width: 120px;
+    border-radius: 10px;
+    border-color: #c0c0c0;
 }
 
 .article_list > .s-r-f > .s-r > .s-v-recruit{
     position: relative;
-    margin-top: 20px;
-    left: 80px;
+    top: -30px;
+    left: 340px;
     height: 20px;
     width: 120px;
+    border-radius: 10px;
+    border-color: #c0c0c0;
 }
 
 .article_list > .s-r-f > .s-r > .s-h-recruit{
     position: relative;
-    margin-top: 20px;
-    left: 80px;
+    top: -65px;
+    left: 480px;
     height: 20px;
-    width: 150px;
+    width: 120px;
+    border-radius: 10px;
+    border-color: #c0c0c0;
 }
 
 .article_list > .s-r-f > .s-r > button{
     position: relative;
-    height: 38px;
+    height: 40px;
     width: 68px;
-    top: -45px;
-    left: 50px;
+    top: -100px;
+    left: 430px;
     margin-bottom: 0;
-    border-radius: 1px;
+    border-radius: 20px;
     background-color: #ea5532;
-    border-color: none;
+    border:1px solid #fff;
+    transition: .4s;
+}
+
+.article_list > .s-r-f > .s-r > button:hover{
+    background-color: #cc482b;
 }

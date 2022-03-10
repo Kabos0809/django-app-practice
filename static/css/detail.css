@@ -18,27 +18,10 @@
     width: 699px;
     font-size: 20px;
     border-bottom: 1px solid #c0c0c0;
-    padding-left: 20px;
+    padding-left: 25px;
     padding-right: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-bottom: 5px;
+    top: -12px;
     left: -20px;
-}
-
-.main-detail > .author > a{
-    position: relative;
-    text-decoration: none;
-    color: #49494d;
-    border-radius: 30px;
-    font-size: 15px;
-    left: 460px;
-    top: 15px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-top: 10px;
-    padding-bottom: 15px;
-}
-
-.main-detail > .author > a:hover{
-    background-color: #e6e6e6;
 }

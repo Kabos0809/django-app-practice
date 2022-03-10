@@ -1,8 +1,7 @@
 .form{
     position: relative;
     margin-left: 400px;
-    margin-bottom: 200px;
-    font-weight: bold;
+    margin-bottom: 0px;
     color: #49494d;
     padding-bottom: 100px;
     background-color: #ffffff;
@@ -35,40 +34,58 @@
 
 .form > .form_main > .title{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > .hard{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > .vc{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > .rnk{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > .num{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > .per{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > .comments{
     position: relative;
-    left: 20px;
+    left: 40px;
 }
 
 .form > .form_main > button{
     position: relative;
-    left: 20px;
+    width: 100px;
+    height: 40px;
+    top: 30px;
+    left: 500px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    background-color: #ea5532;
+    border:0.5px solid #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-radius: 21px;
+    transition: .4s;
+}
+
+.form > .form_main > button:hover{
+    background-color: #cc482b;
 }

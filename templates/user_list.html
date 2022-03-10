@@ -3,7 +3,7 @@
 {% block body %}
 <link rel=stylesheet type=text/css href="{% static 'css/user_list.css' %}" />
 <div class="user-list">
-    <h3 class="u-list-h3">Search for Legends</h3>
+    <h3 class="u-list-h3">プレイヤー検索</h3>
     <div class="user-search">
         <form class="user-search-f" method="GET" action="{% url 'main:User_List' %}">
             <input type="text" name="keyword" placeholder="ユーザー名 or プレイヤー名検索" class="input-keyword">
@@ -73,7 +73,7 @@
         <ul class="user-list-ul">
             <li>    
             <a href="{% url 'main:User_Detail' list.pk %}" class="users">
-                <p class="player-icon">{% if list.icon %}<img src="{{ list.icon.url }}" height="60px" width="60px"/>{% else %}<img src={% static 'img/icon_none.jpg' %} height="60px" width="60px" />{% endif %}</p>
+                <p class="player-icon">{% if list.icon %}<img src="{{ list.icon.url }}" height="55px" width="55px"/>{% else %}<img src={% static 'img/icon_none.jpg' %} height="55px" width="55px" />{% endif %}</p>
                 <p class="player-name">{{ list.player_name }} &nbsp; (@{{ list.username }})</p>
                 <p class="any-info">RANK : {{ list.rank }} &nbsp; プレイ環境 : {% for hard in list.split_playfield %}{{ hard }}{% endfor %}</p>
                 <p class="any-info2">よく使うレジェンド : 

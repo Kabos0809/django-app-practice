@@ -127,6 +127,9 @@ class reportModel(models.Model):
     def __str__(self):
         return str(self.date)
 
+
+#掲示板カテゴリー
+
 #class ThreadCategory(models.Model):
 #   id = models.UUIDField(primary_key=True, editable=False, default=uuid)
 #   name = models.CharField(max_length=50)
@@ -150,4 +153,13 @@ class ThreadComments(models.Model):
 
     def __str__(self):
         return self.comment
-    
+
+#DM機能実装するかは未定
+
+#class DirectMessage(models.Model):
+#    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
+#    for_user = models.ForeignKey(CustomUser, editable=False, on_delete=models.CASCADE)
+#    time = models.TimeField(default=timezone.now())
+#    mes =models.CharField(max_length=2000)
+#    def __str__(self):
+#        return self.mes

@@ -5,12 +5,12 @@
 <div class="main-detail">
     <h3 class="recruit">Recruit</h3>
     <div class="author">
-    <a href="{% url 'main:User_Detail' object.user.pk %}">
-        {% if object.user.icon %}<img src="{{ object.user.icon.url }}" height="35px" width="35px" >{% else %}<img src="{% static 'img/icon_none.jpg' %}" height="35px" width="35px">{% endif %}
-        {{ object.user }}</a>
+    <a href="{% url 'main:User_Detail' object.user.pk %}" class="r-user">
+        {% if object.user.icon %}<img src="{{ object.user.icon.url }}" height="35px" width="35px" class="r-user-icon">{% else %}<img src="{% static 'img/icon_none.jpg' %}" height="35px" width="35px" class="r-user-icon">{% endif %}
+        <p class="r-user-name">{{ object.user }}</p></a>
     </div>
-    <div class="title">
-        <h3>{{ object.title }}</h3>
+    <div class="a-title">
+        <p class="title">{{ object.title }}</p>
     </div>
     <div class="categories">
         <p class="hard">プレイ環境 : {{ object.hard }}</p>
