@@ -45,15 +45,11 @@
         {% for list in object_list %}
         <ul class="content-list">
             <li>
-                {% if list.user_id == user.id %}
-                {% else %}
-                <a href="{% url 'main:Report' %}" class="report-form">違反報告</a>
-                {% endif %}</br>  
                 <a href="{% url 'main:Article_Detail' list.pk %}" class="post">
-                    {% if list.user.icon %}<img src="{{ list.user.icon.url }}" width="40px" height="40px">{% else %}<img src="{% url 'static:img/icon_none.jpg' %}" width="40px" height="40px">{% endif %}
-                    <p class="art-username">{{ list.user.player_name }}</p>
+                    {% if list.user.icon %}<img src="{{ list.user.icon.url }}" width="40px" height="40px">{% else %}<img src="{% static 'img/icon_none.jpg' %}" width="40px" height="40px">{% endif %}
+                    <p class="art-username">{{ list.user.username }}</p>
                     <p class="art-title">{{ list.title }}</p>
-                    <p class="art-info1">希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max}} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }}</p>
+                    <p class="art-info1">希望ランク : {{ list.rnk_min }} ～ {{ list.rnk_max }} &nbsp; モード : {{ list.per }} &nbsp; 人数 : {{ list.num }}</p>
                     <p class="art-info2">プレイ環境 : {{ list.hard }} &nbsp; VC : {{ list.vc }}</p>
                     <p class="date">投稿日時 : {{ list.date }}</p>
                     <p class="id">id : {{ list.id }}</p>

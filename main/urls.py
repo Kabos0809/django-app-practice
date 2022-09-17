@@ -28,4 +28,6 @@ urlpatterns = [
     path('search/', views.SearchListView.as_view(), name="Search"),
     path('userlist/', views.UserListView.as_view(), name="User_List"),
     path('userdetail/<uuid:pk>/', views.UserDetailView.as_view(), name="User_Detail"),
+    path('settings/', views.SettingsView.as_view(), name="Settings"),
+    path('settings/user_change/', views.UserChangeView.as_view(), name="User_Change"),
 ]

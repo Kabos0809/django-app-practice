@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserChangeForm, UserCreationForm
-from .models import CustomUser, ThreadComments, ThreadModel, article_form, reportModel, article_comment
+from .models import CustomUser, ThreadComments, ThreadModel, apex_recruit, reportModel, article_comment
 
 # Register your models here.
 admin.site.register(reportModel)
@@ -13,7 +13,7 @@ class articleAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'title', 'comments', 'rnk_min', 'rnk_max', 'vc', 'num', 'per', 'hard')
     search_fields = ['id']
 
-admin.site.register(article_form, articleAdmin)
+admin.site.register(apex_recruit, articleAdmin)
 
 #募集コメント
 
@@ -39,18 +39,18 @@ class UserAdmin(BaseUserAdmin):
     form = UserChangeForm
     add_form = UserCreationForm
 
-    list_display = ('id', 'player_name', 'username', 'email', 'last_login')
+    list_display = ('id', 'username', 'player_name', 'email', 'last_login')
     list_filter = ('is_staff', 'is_superuser')
     fieldsets = (
         (None, {
-            "fields": ('player_name', 'email', 'password', 'username', 'icon')}),
-            ('Personal info', {'fields':('playfield', 'rank', 'discord_id', 'comments', 'character', 'last_login')}),
-            ('Permissions',{'fields':('is_staff', 'is_superuser')})
+            "fields": ('email', 'password', 'username', 'player_name', 'icon')}),
+            ('Personal info', {'fields':('playfield', 'rank', 'steam_url', 'origin_id', 'psn_id', 'switch_id', 'other_id','discord_id', 'comments', 'character', 'last_login')}),
+            ('Permissions',{'fields':('is_staff', 'is_superuser', 'is_show_steam', 'is_show_origin', 'is_show_psn', 'is_show_switch', 'is_show_discord','is_show_other')})
     )
     add_fieldsetd = (
         (None,{
             'classes':('wide',),
-            'fields':('id', 'icon', 'username', 'email', 'player_name', 'password1', 'playfield', 'rank', 'discord_id', 'comments', 'character', 'last_login')}
+            'fields':('id', 'icon', 'username', 'player_name', 'email', 'password1', 'playfield', 'rank', 'steam_url', 'origin_id', 'psn_id', 'switch_id', 'discord_id', 'comments', 'character', 'last_login')}
             ),
     )
 

@@ -1,5 +1,5 @@
 {% load static %}
-<hmtl lang="ja">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <title>Gamate</title>
@@ -45,7 +45,11 @@
                     <a href="">メッセージ</a>
                 </li>
                 <li>
-                    <a href="">プロフィール</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'main:User_Detail' request.user.pk %}">プロフィール</a>
+                    {% else %}
+                    <a href="{% url 'main:Login' %}">プロフィール</a>
+                    {% endif %}
                 </li>
                 <li>
                     <a href="">設定</a>

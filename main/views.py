@@ -1,10 +1,12 @@
 from django.contrib.auth import login as auth_login
 from django.contrib import messages
+from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, CreateView, DeleteView
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy
-from .models import CustomUser, ThreadComments, ThreadModel, article_comment, article_form, reportModel
-from .forms import CommentForm, NewsCommentForm, NewsForm, ReportForm, UserCreationForm, categorie_form, LoginForm
+from numpy import character
+from .models import CustomUser, ThreadComments, ThreadModel, article_comment, apex_recruit, reportModel
+from .forms import CommentForm, NewsCommentForm, NewsForm, ReportForm, UserChangeForm, UserCreationForm, categorie_form, LoginForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -39,7 +41,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 #投稿削除
 
 class PostDeleteView(LoginRequiredMixin, DeleteView):
-    model = article_form
+    model = apex_recruit
     template_name = 'delete.html'
     success_url = reverse_lazy('main:Article_List')
     success_message = "投稿を削除しました"
@@ -52,12 +54,12 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
 class Article_list(ListView):
     template_name = 'article_list.html'
-    model = article_form
+    model = apex_recruit
     ordering = ['-date']
 
     def get_queryset(self):
         keyword = self.request.GET.get('keyword')
-        queryset = article_form.objects.order_by('-date')
+        queryset = apex_recruit.objects.order_by('-date')
         category = self.request.GET.get('category')
         num = self.request.GET.get('num')
         vc = self.request.GET.get('vc')
@@ -247,8 +249,8 @@ class Article_list(ListView):
 
 class Article_detail(DetailView):
     template_name = 'detail.html'
-    model = article_form
-    queryset = article_form.objects.all()
+    model = apex_recruit
+    queryset = apex_recruit.objects.all()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -265,7 +267,7 @@ class Article_CommentView(CreateView):
 
     def form_valid(self, form):
         post_pk = self.kwargs.get('pk')
-        post = get_object_or_404(article_form, pk=post_pk)
+        post = get_object_or_404(apex_recruit, pk=post_pk)
         form.instance.user = self.request.user
         comment = form.save(commit=False)
         comment.article = post
@@ -388,7 +390,7 @@ class NewsCommentView(CreateView):
 #Search.htmlリスト
 
 class SearchListView(ListView):
-    model = article_form
+    model = apex_recruit
     template_name = "Search.html"
     
     def get_context_data(self, **kwargs):
@@ -399,7 +401,7 @@ class SearchListView(ListView):
         })
         return context
 
-
+#ユーザーリスト+ユーザー検索
 
 class UserListView(ListView):
     model = CustomUser
@@ -489,7 +491,63 @@ class UserListView(ListView):
             )
         return queryset
 
+#ユーザーページ
+
 class UserDetailView(DetailView):
     model = CustomUser
     template_name = 'user_detail.html'
     queryset = CustomUser.objects.all()
+
+#ユーザー編集ページ
+
+class UserChangeView(View):
+    def get(self, request, *args, **kwargs):
+        context = {}
+        form = UserChangeForm()
+        context["form"] = form
+        return render(request, 'index.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        context = {}
+        form = UserChangeForm(request.POST, request.FILES)
+        if form.is_valid():
+            
+            username = form.cleaned_data["username"]
+            player_name = form.cleaned_data["player_name"]
+            icon = form.cleaned_data["icon"]
+            steam_url = form.cleaned_data["steam_url"]
+            origin_id = form.cleaned_data["origin_url"]
+            psn_id = form.cleaned_data["psn_id"]
+            switch_id = form.cleaned_data["switch_id"]
+            other_id = form.cleaned_data["other_id"]
+            discord_id = form.cleaned_data["discord_id"]
+            rank = form.cleaned_data["rank"]
+            character = form.cleaned_data["character"]
+            playfield = form.cleaned_data["playfield"]
+            
+            user_obj = CustomUser.objects.all()
+            
+            user_obj.username = username
+            user_obj.icon = icon
+            user_obj.player_name = player_name
+            user_obj.steam_url = steam_url
+            user_obj.origin_id = origin_id
+            user_obj.psn_id = psn_id
+            user_obj.switch_id = switch_id
+            user_obj.other_id = other_id
+            user_obj.discord_id = discord_id
+            user_obj.rank = rank
+            user_obj.character = character
+            user_obj.playfield = playfield
+            user_obj.save()
+
+            return redirect('main:Settings')
+        else:
+            context["form"] = form
+
+            return render(request, 'user_change.html', context)
+
+#設定画面
+
+class SettingsView(TemplateView):
+    template_name = 'settings.html'

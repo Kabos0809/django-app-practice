@@ -42,7 +42,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     
     id = models.UUIDField(default=uuid4, primary_key=True, editable=False)
     username = models.CharField(_("username"), max_length=30, validators=[username_validator], blank=False, unique=True)
-    player_name = models.CharField(_("player name"), max_length=30, unique=True)
+    player_name = models.CharField(_("player name"), max_length=50)
+    steam_url = models.CharField(_("steam id"), max_length=200, blank=True, null=True)
+    is_show_steam = models.BooleanField(_("show steam id"), default=False)
+    origin_id = models.CharField(_("origin id"), max_length=200, blank=True, null=True)
+    is_show_origin = models.BooleanField(_("show origin id"), default=False)
+    psn_id = models.CharField(_("PSN id"), max_length=200, blank=True, null=True)
+    is_show_psn = models.BooleanField(_("show psn id"), default=False)
+    switch_id = models.CharField(_("switch id"), max_length=200, blank=True, null=True)
+    is_show_switch = models.BooleanField(_("show switch id"), default=False)
+    other_id = models.CharField(_('other id'), max_length=200, blank=True, null=True)
+    is_show_other = models.BooleanField(_('show other id'), default=False)
     icon = models.ImageField(_("icon"), upload_to='user_icon/', blank=True)
     email = models.EmailField(_("email address"), unique=True)
     is_staff = models.BooleanField(_("staff status"), default=False)
@@ -50,16 +60,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(_("active"), default=True)
     last_login = models.DateTimeField(_("last login"), blank=True, null=True)
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
-    playfield = models.CharField(_("ply_f"), max_length=30, blank=True, null=True)
+    playfield = models.CharField(_("ply_f"), max_length=30, blank=True, null=True, default="設定なし")
     rank = models.CharField(_("rank"), max_length=30, blank=False)
     discord_id = models.CharField(_("discord"), max_length=100, blank=True)
+    is_show_discord = models.BooleanField(_("show discord id"), default=False)
     comments = models.CharField(_("comments"), max_length=300, blank=True, default="自己紹介はありません")
-    character = models.CharField(_("character"), max_length=2000, blank=True, null=True)
+    character = models.CharField(_("character"), max_length=2000, blank=True, null=True, default="設定なし")
 
     objects = MyUserManager()
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
-    REQUIRED_FIELDS = ["email"]
+    REQUIRED_FIELDS = ["username", "player_name"]
 
     class Meta:
         verbose_name = _("user")
@@ -87,9 +98,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return a
 
     def __str__(self):
-        return self.player_name
+        return self.username
 
-class article_form(models.Model):
+class apex_recruit(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
@@ -107,7 +118,7 @@ class article_form(models.Model):
 
 class article_comment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
-    article = models.ForeignKey(article_form, editable=False, on_delete=models.CASCADE)
+    article = models.ForeignKey(apex_recruit, editable=False, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)
     comment = models.CharField(max_length=140, default=' ')
@@ -118,7 +129,7 @@ class article_comment(models.Model):
 class reportModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE)
-    article_id = models.ForeignKey(article_form, editable=False, on_delete=models.CASCADE)
+    article_id = models.ForeignKey(apex_recruit, editable=False, on_delete=models.CASCADE)
     category = models.CharField(max_length=30, blank=True)
     date = models.DateTimeField(default=timezone.now)
     matters = models.CharField(max_length=100, blank=True)

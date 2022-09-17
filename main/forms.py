@@ -1,5 +1,5 @@
 from django import forms
-from .models import CustomUser, ThreadComments, article_comment, article_form, reportModel, ThreadModel
+from .models import CustomUser, ThreadComments, article_comment, apex_recruit, reportModel, ThreadModel
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth import forms as auth_forms
 from django.contrib.auth.password_validation import validate_password
@@ -85,7 +85,7 @@ class categorie_form(forms.ModelForm):
     )
 
     class Meta:
-        model = article_form
+        model = apex_recruit
         fields = ('title', 'comments', 'rnk_min', 'rnk_max', 'num', 'per', 'hard', 'vc')
 
 #募集へのコメント
@@ -109,6 +109,16 @@ class UserCreationForm(forms.ModelForm):
 
     icon = forms.ImageField(required=False)
 
+    steam_url = forms.CharField(required=False)
+
+    origin_id = forms.CharField(required=False)
+
+    psn_id = forms.CharField(required=False)
+
+    switch_id = forms.CharField(required=False)
+
+    other_id = forms.CharField(required=False)
+
     discord_id = forms.CharField(required=False)
 
     rank = forms.ChoiceField(
@@ -120,21 +130,21 @@ class UserCreationForm(forms.ModelForm):
 
     playfield = forms.MultipleChoiceField(
         choices=p_field,
-        required=False,
+        required=True,
         label='playfield',
         widget=forms.CheckboxSelectMultiple
     )
 
     character = forms.fields.MultipleChoiceField(
         choices = characters,
-        required=False,
+        required=True,
         label = 'よく使うキャラクター',
         widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
         model = CustomUser
-        fields = ('icon', 'username', 'player_name', 'email', 'playfield', 'rank', 'discord_id', 'password1', 'comments', 'character')
+        fields = ('icon', 'username', 'player_name', 'steam_url', 'origin_id', 'psn_id', 'switch_id', 'other_id', 'is_show_steam', 'is_show_origin', 'is_show_psn', 'is_show_switch', 'is_show_other', 'is_show_discord', 'email', 'playfield', 'rank', 'discord_id', 'password1', 'comments', 'character')
 
         def save(self, commit=True):
             user = super().save(commit=False)
@@ -145,6 +155,30 @@ class UserCreationForm(forms.ModelForm):
             if commit:
                 user.save()
             return user
+
+    def clean_username(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        if len(username) < 8:
+            raise forms.ValidationError('ユーザーネームが短すぎます')
+
+    def clean_rank(self):
+        cleaned_data = super().clean()
+        rank = cleaned_data.get('rank')
+        if not rank:
+            raise forms.ValidationError('ランクを選択してください')
+    
+    def clean_playfield(self):
+        cleaned_data = super().clean()
+        playfield = cleaned_data.get('playfield')
+        if not playfield:
+            raise forms.ValidationError('プレイ環境を設定してください')
+    
+    def clean_character(self):
+        cleaned_data = super().clean()
+        character = cleaned_data.get('character')
+        if not character:
+            raise forms.ValidationError('レジェンドを選択してください')
 
     def clean(self):
         cleaned_data = super().clean()
@@ -157,6 +191,24 @@ class UserCreationForm(forms.ModelForm):
 
 class UserChangeForm(forms.ModelForm):
     password = ReadOnlyPasswordHashField()
+
+    username = forms.CharField(required=False)
+
+    player_name = forms.CharField(required=False)
+
+    icon = forms.ImageField(required=False)
+
+    steam_url = forms.CharField(required=False)
+
+    origin_id = forms.CharField(required=False)
+
+    psn_id = forms.CharField(required=False)
+
+    switch_id = forms.CharField(required=False)
+
+    other_id = forms.CharField(required=False)
+
+    discord_id = forms.CharField(required=False)
 
     comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'cols':'80', 'rows':'10'}))
 
@@ -183,10 +235,21 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('icon', 'username', 'email', 'player_name', 'playfield', 'rank', 'comments', 'character', 'discord_id')
+        fields = ('icon', 'username', 'player_name', 'email', 'steam_url', 'origin_id', 'psn_id', 'switch_id', 'other_id', 'playfield', 'rank', 'comments', 'character', 'discord_id')
 
         def clean_password(self):
             return self.initial["password"]
+    
+    def clean_username(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        if len(username) < 8:
+            raise forms.ValidationError('ユーザーネームが短すぎます')
+
+#プライバシー設定    
+
+#class PrivacySettingForm(forms.ModelForm):
+    
 
 #ログインフォーム
 

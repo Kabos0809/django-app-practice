@@ -13,6 +13,67 @@
     top: -87px;
 }
 
+.h4-hard{
+    position: relative;
+    width: 150px;
+}
+
+.open-check-hard{
+    position: relative;
+    top: -45px;
+    left: 125px;
+}
+
+.u-s-hard{
+    position: relative;
+    top: -35px;
+    height: 0px;
+    opacity: 0;
+    visibility: hidden;
+    transition: .5s;
+}
+
+.open-check-character{
+    position: relative;
+    top: -125px;
+    left: 125px;
+}
+
+.h4-character{
+    position: relative;
+    top: -80px;
+    width: 150px;
+}
+
+.u-s-character{
+    position: relative;
+    top: -115px;
+    opacity: 0;
+    height: 0;
+    visibility: hidden;
+    transition: .5s;
+}
+
+.open-check-hard:checked + .u-s-hard{
+    position: relative;
+    opacity: 1;
+    height: 30px;
+    visibility: visible;
+}
+
+.open-check-character:checked + .u-s-character{
+    position: relative;
+    opacity: 1;
+    height: 150px;
+    margin-bottom: 30px;
+    visibility: visible;
+}
+
+.user-search-f > button{
+    position: relative;
+    top: -125px;
+}
+
 .user-list > .u-list-h3{
     position: relative;
     top: -40px;
@@ -22,9 +83,10 @@
     padding-left: 0px;
 }
 
-.user-list > .user-search > .user-search-f{
+.user-search-f{
     position: relative;
     border-top: 1px solid #c0c0c0;
+    height: 200px;
     width: 672px;
     padding-left: 25px;
     padding-right: 25px;
@@ -32,9 +94,15 @@
     padding-bottom: 10px;
     top: -50px;
     left: -21px;
+    transition: .5s;
 }
 
-.user-list > .user-list-link > .user-list-ul > li{
+.open-check-character:checked + .user-search-f{
+    position: relative;
+    height: 300px;
+}
+
+.user-list-ul > li{
     position: relative;
     list-style: none;
     top: -20px;
@@ -44,7 +112,7 @@ h4{
     font-size: 17px;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a{
+.user-list-ul > li > a{
     position: relative;
     background-color: #fff;
     display: block;
@@ -65,35 +133,35 @@ h4{
     transition: .4s;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a:hover{
+.user-list-ul > li > a:hover{
     position: relative;
     background-color: #e6e6e6;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a > .player-icon{
+.player-icon{
     position: relative;
     top: 0px;
     left: -5px;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a > .player-name{
+.player-name{
     position: relative;
     top: -60px;
     left: 70px;
     font-size: 18px;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a > .any-info{
+.any-info{
     position: relative;
     top: -55px;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a > .any-info2{
+.any-info2{
     position: relative;
     top: -60px;
 }
 
-.user-list > .user-list-link > .user-list-ul > li > a > .last-login{
+.last-login{
     position: relative;
     top: -200px;
     left: 400px;
